@@ -1,18 +1,24 @@
 import React from 'react';
+import {Route, Switch} from 'react-router';
+import './App.css';
 import SignUp from './components/SignUp.component'
 import Login from './components/Login.component'
-import './App.css';
+import Home from './components/Home.component'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1 className="app-title">Memory Game</h1>
-      </header>
-      <div className="btn" id="login_btn">Login</div>
-      <div className="btn" id="signup_btn">Signup</div>
-      <SignUp x={2} />
-      <Login />
+    <div>
+      <Switch>
+        <Route exact path="/">
+          <Home/>
+        </Route>
+        <Route path="/signup">
+          <SignUp x={2} />
+        </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
+      </Switch>
     </div>
   );
 }
