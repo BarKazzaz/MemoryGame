@@ -2,30 +2,57 @@ import React, { Component }  from 'react';
 
 export default class Login extends Component{
 
+    constructor(props){
+        super(props);
+        this.state = {
+            user: "",
+            pass: ""
+        }
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+    }
+    compStyle = {}
+
+    handleSubmit(event){
+        //TODO: send request to login to node server (via socket)
+        console.log(this.state);
+        setTimeout( () => { window.location = '/' }, 500);//redirect to home
+    }
+
+    handleInputChange(event){
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        this.setState({
+            [name]: value
+        })
+    }
+
     render(){
         return(
-            <div style={{backgroundColor:'red'}}>
-                <form action="action_page.php" method="post">
-                    <div className={"imgcontainer"}>
-                        <img src="img_avatar2.png" alt="Avatar" class="avatar"/>
-                    </div>
-
-                    <div className={"container"}>
-                        <label for="unaze"><b>Username</b></label>
-                        <input type="text" placeholder="Enter Username" name="uname" required/>
-
-                        <label for="psw"><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" name="psw" required/>
-
-                        <button type="submit">Login</button>
-                        <input type="checkbox" checked="checked" name="remember"/>
-                    </div>
-
-                    <div className={"container"} style={{backgroundColor:'#f1f1f1'}}>
-                        <button type="button" className={"cancelbtn"}>Cancel</button>
-                        <span className={"psw"}>Forgot <a href={"/forgot"}>password?</a></span>
-                    </div>
+            <div style={this.compStyle}>
+                {/* <form onSubmit={this.handleSubmit}> */}
+                <form>
+                    <label>
+                        User name:
+                        <input
+                            name="user"
+                            // value={this.state.user}
+                            type="text"
+                            onChange={this.handleInputChange}
+                        />
+                    </label>
+                    <label>
+                        Password:
+                        <input
+                            name="pass"
+                            // value={this.state.user}
+                            type="password"
+                            onChange={this.handleInputChange}
+                        />
+                    </label>
                 </form>
+                <button onClick={this.handleSubmit}>Sumbit</button>
             </div>
         )
     }
