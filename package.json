@@ -1,0 +1,28 @@
+{
+  "name": "memory-game",
+  "version": "1.0.0",
+  "description": "online memory game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm start --prefix client/memory-game"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BarKazzaz/MemoryGame.git"
+  },
+  "keywords": [
+    "io",
+    "game",
+    "memory",
+    "online",
+    "multiplayer",
+    "coop"
+  ],
+  "author": "Bar Kazzaz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BarKazzaz/MemoryGame/issues"
+  },
+  "homepage": "https://github.com/BarKazzaz/MemoryGame#readme"
+}
