@@ -18,6 +18,15 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
+          <Route path="/forgot">
+            <Login />
+          </Route>
+          <Route path="*">
+            {/* TODO: make this a "default" component */}
+            <div id="defaultRouteDiv">
+              <h1>404 - Page not found</h1>
+            </div>
+          </Route>
         </Switch>
       </Router>
   );
