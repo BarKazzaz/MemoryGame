@@ -17,18 +17,29 @@
 }
 
 .btn{
-  background-color: red;
   cursor: pointer;
   display: block;
-  width: fit-content;
-  padding-left: 2px;
-  padding-right: 4px;
-  margin-left: 48%;
-  margin-top: 4px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: rgb(0,0,100) 2px 1px;
+  font-size: large;
+  color: rgb(0, 22, 100);
+  margin-top: 7px;
 }
-
+.btn:hover{
+  background-color: rgba(0, 145, 105, 0.5)
+}
 h1 {
   margin-top: 0;
+}
+
+nav {
+  position: absolute;
+  width: 13vw;
+  height: 70vh;
+  margin-left: 25%;
+  background-color: rgba(0,0,0,0.4);
 }
 
 .GameCard{
