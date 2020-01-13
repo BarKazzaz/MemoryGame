@@ -45,9 +45,10 @@ nav {
 .GameCard{
   background-position: center;
   background-color: wheat;
-  background-size: contain;
+  background-image: url("/cards/back2.jpg");
+  background-size: cover;
   background-repeat: no-repeat;
-  height: 15vh;
+  height: 20vh;
   width: 5vw;
   cursor: pointer;
   margin-top: 2em;
