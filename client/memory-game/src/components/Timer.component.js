@@ -10,6 +10,8 @@ export default class Timer extends Component{
             seconds: props.seconds || 5,
             millSeconds: props.millSeconds || 0
         }
+        // the component that will use the timer. parent needs to implement have a timerListener()
+        this.parentElm = props.parentElm;
         this.start = this.start.bind(this);
         this.stop = this.stop.bind(this);
         this.decMillSeconds = this.decMillSeconds.bind(this);
@@ -56,6 +58,7 @@ export default class Timer extends Component{
     alertEnd(){
         console.log("time ended");
         this.stop();
+        this.parentElm.timerListener("done");
         this.reset();
     }
 
@@ -64,6 +67,12 @@ export default class Timer extends Component{
     }
 
     render(){
-        return <div onClick={this.state.started ? this.stop : this.start}>{this.normalizedTime(this.state.minutes)+":"+this.normalizedTime(this.state.seconds)+":"+this.normalizedTime(this.state.millSeconds)}</div>
+        return(
+            <div onClick={this.state.started ? this.stop : this.start}>
+                { this.normalizedTime(this.state.minutes)+":"
+                +this.normalizedTime(this.state.seconds)+":"
+                +this.normalizedTime(this.state.millSeconds) }
+            </div>
+        )
     }
 }

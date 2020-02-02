@@ -5,17 +5,28 @@ export default class GameCard extends Component{
         super(props);
         this.state = {
             cardClass : props.cardClass || 1,
-            flipped: false
+            flipped: false,
+            clickable: props.clickable
         }
+        this.parent = props.parent; // the game object should have cardsClickHandler(cardClass) implemented
         this.clickHandler = this.clickHandler.bind(this);
     }
 
+    componentDidUpdate(prevProps){
+        if(this.props.clickable !== prevProps.clickable)
+            this.setState({ clickable : this.props.clickable });
+    }
     clickHandler(event){
-        this.setState({flipped:!this.state.flipped})
+        if(this.state.clickable){
+            this.setState({flipped : !this.state.flipped});
+            this.parent.cardsClickHandelr(this);
+        }
     }
 
     render(){
-        let card = this.state.flipped ? <div className={"GameCard Card"+this.state.cardClass}></div> : <div className={"GameCard"} onClick={this.clickHandler}></div>
+        let card = this.state.flipped ?
+        <div className={"GameCard Card"+this.state.cardClass}></div>
+        : <div className={"GameCard"} onClick={this.clickHandler}></div>
         return (card)
     }
 
