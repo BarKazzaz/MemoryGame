@@ -8,5 +8,10 @@
     "start": "node server.js"
   },
   "author": "dvir",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.8.11",
+    "socket.io": "^2.3.0"
+  }
 }
