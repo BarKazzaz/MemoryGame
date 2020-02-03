@@ -5,11 +5,11 @@ const socketIo = require("socket.io")(server);
 const path = require("path");
 const mongoose = require("mongoose");
 const port = process.env.PORT || 5000;
-const Room = require("Room");
-const Player = require("Player");
+const Room = require(path.join(__dirname, "Room"));
+const Player = require(path.join(__dirname, "Player"));
 const maxPlayers = 2;
-const rowSize = 4;
-const colSize = 3;
+const rowSize = 3;
+const colSize = 4;
 let roomsList = []; //rooms list
 
 function getRandomName(){
@@ -24,9 +24,9 @@ function generateCardsBoard(){
     }
     matrix.sort((a,b)=>0.5-Math.random());
     let arr= [];
-    for(let i=0;i<4;i++){
+    for(let i=0;i<rowSize;i++){
         arr[i] = [];
-        for(let j=0;j<3;j++){
+        for(let j=0;j<colSize;j++){
             arr[i].push(matrix.pop());
         }
     }
@@ -36,25 +36,28 @@ function generateCardsBoard(){
 socketIo.on("connection", socket => {
     socket.on("quickPlay", ()=>{
         let player = new Player();
+        let foundRoom = false;
         player.id = getRandomName();
         for(let room of roomsList) {
             if (room.players.length < maxPlayers) {
                 room.players.push(player);
                 socket.join(room.name);
+                foundRoom = true;
                 socket.emit("didJoin", {board: room.board, id: player.id});
-                if(numOfPlayers<maxPlayers)
-                socketIo.sockets.in(room.name).emit("lets start")
+                if(room.players.length === maxPlayers)
+                    socketIo.sockets.in(room.name).emit("lets start");
             }
         }
-        let name = getRandomName();
-        let room = new Room(name, maxPlayers);
-        room.players.push(player);
-        room.board = generateCardsBoard();
-        roomsList.push(room);
-        return socket.join(room.name);
+        if(!foundRoom){
+            let name = getRandomName();
+            let room = new Room(name, maxPlayers);
+            room.players.push(player);
+            room.board = generateCardsBoard();
+            roomsList.push(room);
+            socket.join(room.name);
+            socket.emit("didJoin", {board: room.board, id: player.id});
+        }
     });
-
-
 });
 
 if (process.env.NODE_ENV === "production"){// if heroku is running

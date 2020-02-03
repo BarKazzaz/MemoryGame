@@ -31,7 +31,7 @@ export default class Game extends Component{
 
     componentDidMount(){
         this.state.socket.emit("quickPlay");
-        this.state.socket.on("didJoin", (data) => this.setState({cards: data.board,myPlayerId: data.id, gameState: "connected"}));
+        this.state.socket.on("didJoin", (data) => this.setState({cards: data.board, myPlayerId: data.id, gameState: "connected"}));
         this.state.socket.on("lets start", (startingPlayer) => this.setState({currentPlayer: startingPlayer, gameState: "running"}));
     }
     startGame(){
