@@ -25,7 +25,7 @@ export default class GameCard extends Component{
 
     render(){
         let card = this.state.flipped ?
-        <div className={"GameCard Card"+this.state.cardClass}></div>
+        <div className={"GameCard Card"+this.state.cardClass} style={{backgroundImage: `url("/cards/${this.state.cardClass}.jpg")`}}></div>
         : <div className={"GameCard"} onClick={this.clickHandler}></div>
         return (card)
     }
