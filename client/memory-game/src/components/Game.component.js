@@ -1,11 +1,15 @@
 import React, { Component } from "react"
 import GameCard from "./GameCard.component";
 import Timer from "./Timer.component";
+import io from "socket.io-client";
+
+const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000': "/";
 
 export default class Game extends Component{
     constructor(props){
         super(props);
         this.state = {
+            socket: io(SERVER_ADDRESS),
             gameState:"pending",
             player1 : {},
             player2 : {},
@@ -25,6 +29,11 @@ export default class Game extends Component{
         window.addEventListener("keydown", this.gameKeyHandler);
     }
 
+    componentDidMount(){
+        this.state.socket.emit("quickPlay");
+        this.state.socket.on("didJoin", (data) => this.setState({cards: data.board,myPlayerId: data.id, gameState: "connected"}));
+        this.state.socket.on("lets start", (startingPlayer) => this.setState({currentPlayer: startingPlayer, gameState: "running"}));
+    }
     startGame(){
         this.setState({gameState:"running"});
         setTimeout(()=> this.timer.current.start(), 2000);// call the Timer stop() function
@@ -75,7 +84,13 @@ export default class Game extends Component{
         if(this.state.gameState === "pending"){
             return(
                 <div>
-                    <h2>Pending players connection...</h2>
+                    <h2>Pending server connection...</h2>
+                </div>
+            )
+        }if(this.state.gameState === "connected"){
+            return(
+                <div>
+                    <h2>Waiting for other players to join...</h2>
                 </div>
             )
         }else if(this.state.gameState === "ended"){
