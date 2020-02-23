@@ -10,17 +10,15 @@ export default class Game extends Component{
         super(props);
         this.state = {
             socket: io(SERVER_ADDRESS),
+            room:"",
             gameState:"pending",
-            player1 : {},
-            player2 : {},
+            players:[],
             score: {player1 : 0, player2 : 0},
-            currentPlayer : 1,
-            myPlayerId: 1,
+            currentPlayer : 'id',
+            currentPlayerIndex: 0,
+            myPlayerId: '',
             flippedCard: null,
-            cards : props.cards || 
-                    [[1,2,3,4],
-                    [5,6,4,1],
-                    [6,2,5,3]]
+            cards : null
         }
         this.gameKeyHandler = this.gameKeyHandler.bind(this);
         this.timer = React.createRef();
@@ -31,8 +29,13 @@ export default class Game extends Component{
 
     componentDidMount(){
         this.state.socket.emit("quickPlay");
-        this.state.socket.on("didJoin", (data) => this.setState({cards: data.board, myPlayerId: data.id, gameState: "connected"}));
-        this.state.socket.on("lets start", (startingPlayer) => this.setState({currentPlayer: startingPlayer, gameState: "running"}));
+        this.state.socket.on("didJoin", (data) => {
+            this.setState({room: data.room, cards: data.board, myPlayerId: data.id, gameState: "connected"})
+        });
+        this.state.socket.on("lets start", (data) => {
+            this.setState({currentPlayer: data.startingPlayer, players: data.players, gameState: "starting"})
+        });
+        this.state.socket.on("endTurn", ()=>this.endTurn());
     }
     startGame(){
         this.setState({gameState:"running"});
@@ -47,8 +50,8 @@ export default class Game extends Component{
         if(e.code === "KeyP" && this.state.gameState === "running") { this.endGame(); console.log("stoping.."); }
     }
     timerListener(e){
-        if(e === "done"){ //switch user and restart timer
-            this.endTurn();
+        if(e === "done"){ //timer event - the timer reached 00:00:00
+            this.changeTurn();
         }
     }
     cardsClickHandelr(card){
@@ -57,27 +60,36 @@ export default class Game extends Component{
                 //TODO: hide cards
                 //...
                 let newScore = this.state.score;
-                this.state.currentPlayer === 1 ? newScore.player1++ : newScore.player2++;
+                this.state.currentPlayer === this.state.myPlayerId ? newScore.player1++ : newScore.player2++;
                 this.setState({score: newScore});
                 this.setState({flippedCard : null});
                 this.timer.current.reset();
-            }else{
+            }else {
                 this.timer.current.stop();
                 setTimeout(()=>{
                     card.setState({flipped : false});
-                    this.endTurn();
+                    this.changeTurn();
                 }, 200);
             }
         }else
             this.setState({flippedCard : card});
     }
+    changeTurn(){
+        if(this.state.currentPlayer === this.state.myPlayerId) { this.state.socket.emit("switchTurns", {room: this.state.room}); }
+        else { console.log("i don't say change"); }
+    }
+
     endTurn(){
+        console.log("ending turn");
         this.timer.current.reset();
-        this.setState({ currentPlayer: (this.state.currentPlayer === 1) ? 2 : 1 });
+        this.timer.current.stop();
+        let nextPlayerIndex = (this.state.currentPlayerIndex + 1)%2;
+        this.setState({ currentPlayerIndex: nextPlayerIndex, currentPlayer: ((this.state.players[nextPlayerIndex].id)) });
         if(this.state.flippedCard !== null){
             this.state.flippedCard.setState({flipped : false});
             this.setState({flippedCard : null});
         }
+        console.log("starting timer");
         this.timer.current.start();
     }
     render(){
@@ -87,10 +99,17 @@ export default class Game extends Component{
                     <h2>Pending server connection...</h2>
                 </div>
             )
-        }if(this.state.gameState === "connected"){
+        }else if(this.state.gameState === "connected"){
             return(
                 <div>
                     <h2>Waiting for other players to join...</h2>
+                </div>
+            )
+        }else if(this.state.gameState === "starting"){
+            this.startGame();
+            return(
+                <div>
+                    <h2>Connected. Starting game</h2>
                 </div>
             )
         }else if(this.state.gameState === "ended"){
@@ -110,7 +129,7 @@ export default class Game extends Component{
         }
         return(
             <div>
-                <div>player <span style={{ fontFamily: "Roboto", textDecoration:"underline overline", fontWeight: "bold" }}>{this.state.currentPlayer}</span> it is your turn!</div>
+                <div>player <span style={{ fontFamily: "Roboto", textDecoration:"underline overline", fontWeight: "bold" }}>{this.state.players[this.state.currentPlayerIndex].name}</span> it is your turn!</div>
                 <div id={"scoreboard"} style={{backgroundColor:"rgba(150,150,150,0.7)", width:"250px", marginLeft:"45%"}}>
                     <div>
                         <Timer ref={this.timer} seconds={6} parentElm={this} style={{fontSize:"20px", color: "red"}}/>

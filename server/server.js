@@ -34,7 +34,7 @@ function generateCardsBoard(){
 }
 
 socketIo.on("connection", socket => {
-    socket.on("quickPlay", ()=>{
+    socket.on("quickPlay", () => {
         let player = new Player();
         let foundRoom = false;
         player.id = getRandomName();
@@ -43,9 +43,10 @@ socketIo.on("connection", socket => {
                 room.players.push(player);
                 socket.join(room.name);
                 foundRoom = true;
-                socket.emit("didJoin", {board: room.board, id: player.id});
+                console.log(room.name);
+                socket.emit("didJoin", { room: room.name, board: room.board, id: player.id});
                 if(room.players.length === maxPlayers)
-                    socketIo.sockets.in(room.name).emit("lets start");
+                    socketIo.sockets.in(room.name).emit("lets start", { startingPlayer: room.players[0].id, players: room.players });
             }
         }
         if(!foundRoom){
@@ -55,9 +56,13 @@ socketIo.on("connection", socket => {
             room.board = generateCardsBoard();
             roomsList.push(room);
             socket.join(room.name);
-            socket.emit("didJoin", {board: room.board, id: player.id});
+            socket.emit("didJoin", { room: room.name, board: room.board, id: player.id});
         }
     });
+    socket.on("switchTurns", (data) => {
+        console.log("switching turns in "+data.room);
+        socketIo.sockets.in(data.room).emit("endTurn");
+    })
 });
 
 if (process.env.NODE_ENV === "production"){// if heroku is running

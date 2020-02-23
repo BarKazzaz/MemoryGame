@@ -19,7 +19,6 @@ export default class Timer extends Component{
     }
 
     start(){
-        console.log("game started")
         this.setState({started: true});
         this.setState({interval: setInterval(this.decMillSeconds, 10)});
     }
@@ -34,7 +33,6 @@ export default class Timer extends Component{
             if(this.state.millSeconds === 0){
                 if(this.state.seconds === 0){
                     if(this.state.minutes === 0){
-                        console.log("alertEnd will be called now")
                         this.alertEnd();
                     }else {
                         this.setState({minutes: this.state.minutes - 1});
@@ -56,7 +54,6 @@ export default class Timer extends Component{
     }
 
     alertEnd(){
-        console.log("time ended");
         this.stop();
         this.parentElm.timerListener("done");
         this.reset();
