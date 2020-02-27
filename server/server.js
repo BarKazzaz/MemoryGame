@@ -60,9 +60,11 @@ socketIo.on("connection", socket => {
         }
     });
     socket.on("switchTurns", (data) => {
-        console.log("switching turns in "+data.room);
         socketIo.sockets.in(data.room).emit("endTurn");
-    })
+    });
+    socket.on("playerFlipped", (data) => {
+        socketIo.sockets.in(data.room).emit("flipCard", data.cardIndexes);
+    });
 });
 
 if (process.env.NODE_ENV === "production"){// if heroku is running
