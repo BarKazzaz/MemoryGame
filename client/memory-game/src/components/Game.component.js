@@ -61,7 +61,7 @@ export default class Game extends Component{
         setTimeout(()=> this.timer.current.start(), 1000); //call the Timer start() function
     }
     endGame(){
-        // stop timer
+        this.timer.current.stop();
         this.setState({gameState:"ended"});
     }
     gameKeyHandler(e){
@@ -83,13 +83,14 @@ export default class Game extends Component{
                 this.state.currentPlayer === this.state.myPlayerId ? newScore.player1++ : newScore.player2++;
                 this.setState({score: newScore});
                 this.setState({flippedCard : null});
-                this.timer.current.reset();
+                if(this.timer.current)
+                    this.timer.current.reset();
             }else {
                 this.timer.current.stop();
                 setTimeout(()=>{
                     card.setState({flipped : false});
                     this.changeTurn();
-                }, 200);
+                }, 300);
             }
         }else
             this.setState({flippedCard : card});
@@ -137,11 +138,24 @@ export default class Game extends Component{
                 </div>
             )
         }else if(this.state.gameState === "ended"){
+            const result = this.state.score.player1 - this.state.score.player2;
+            let resMessage;
+            if(result > 0)
+                resMessage = "WIN!"
+            else if(result < 0)
+                resMessage = "Losing game"
+            else
+                resMessage = "Draw.."
             return(
                 <div>
                     <h2>GAME OVER</h2>
+                    <p>It's a {resMessage}</p>
                 </div>
             )
+        }else{
+            let gameShouldEnd = this.state.score.player1 + this.state.score.player2 === (this.state.cards.length*this.state.cards[0].length)/2;
+            if (gameShouldEnd)
+                this.endGame();
         }
         return(
             <div>
@@ -157,13 +171,13 @@ export default class Game extends Component{
                             <div style={{background:"lightyellow", borderRadius:"15%", width:"55%", height:"55%", marginLeft:"24%"}}>
                                 {this.state.score.player1}
                             </div>
-                            <h1>Home</h1>
+                            <h1>You</h1>
                         </div>
                         <div style={{gridColumn:2, border:"darkred 2px solid"}}>
                             <div style={{background:"lightyellow", borderRadius:"15%", width:"55%", height:"55%", marginLeft:"24%"}}>
                                 {this.state.score.player2}
                             </div>
-                            <h1>Away</h1>
+                            <h1>opponent</h1>
                         </div>
                     </div>
                 </div>
