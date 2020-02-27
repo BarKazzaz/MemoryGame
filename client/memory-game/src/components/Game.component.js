@@ -22,6 +22,7 @@ export default class Game extends Component{
             cardElms: []//actual gameCard Elments to render
         }
         this.gameKeyHandler = this.gameKeyHandler.bind(this);
+        this.cardsClickHandler = this.cardsClickHandler.bind(this);
         this.timer = React.createRef();
         this.startGame = this.startGame.bind(this);
         this.endGame = this.endGame.bind(this);
@@ -38,7 +39,7 @@ export default class Game extends Component{
                 let cardsRow = cards[i].map( (e, index) => {
                     let cardRef = React.createRef();
                     this.state.cards[i].push(cardRef);
-                    return <GameCard ref={this.state.cards[i][index]} parent={this} cardClass={e} key={index} I={i} J={index}/>
+                    return <GameCard ref={this.state.cards[i][index]} parentClickHandler={this.cardsClickHandler} cardClass={e} key={index} I={i} J={index}/>
                 })
                 cardElms.push(<div style={{display:"inline-flex"}} key={i} row={i} className="cardsRow">{cardsRow}</div>);
             }
@@ -142,14 +143,6 @@ export default class Game extends Component{
                 </div>
             )
         }
-        // if gameState === running
-        // let cardElms = [];
-        // for( let i = 0; i<this.state.cards.length; i++){
-        //     let cardsRow = this.state.cards[i].map( (e, index) => {
-        //         return <GameCard parent={this} cardClass={e} key={index} ID={index} clickable={ this.state.currentPlayer === this.state.myPlayerId }/>
-        //     })
-        //     cardElms.push(<div style={{display:"inline-flex"}} key={i} className="cardsRow">{cardsRow}</div>);
-        // }
         return(
             <div>
                 <div>You are {this.state.myPlayerId}</div>

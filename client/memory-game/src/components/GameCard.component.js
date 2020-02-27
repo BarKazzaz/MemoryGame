@@ -11,6 +11,7 @@ export default class GameCard extends Component{
             clickable: true
         }
         this.parent = props.parent; // the game object should have cardsClickHandler(cardClass) implemented
+        this.parentClickHandler = props.parentClickHandler;
         this.clickHandler = this.clickHandler.bind(this);
     }
 
@@ -23,7 +24,7 @@ export default class GameCard extends Component{
     }
     clickHandler(event){
         if(this.state.clickable){
-            return this.parent.cardsClickHandler([this.state.I, this.state.J]);
+            return this.parentClickHandler([this.state.I, this.state.J]);
         }
     }
 
