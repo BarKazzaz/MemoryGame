@@ -69,7 +69,7 @@ socketIo.on("connection", socket => {
 
 if (process.env.NODE_ENV === "production"){// if heroku is running
     console.log("for heroku!");
-    app.use(express.static(path.resolve(__dirname, "..", "kazz-io", "build")));
+    app.use(express.static(path.resolve(__dirname, "..", "client", "memory-game", "build")));
     app.get("*", (req, res) => {
         res.sendFile(path.resolve(__dirname, "..", "kazz-io", "build", "index.html"));
     });
