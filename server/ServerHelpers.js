@@ -29,12 +29,13 @@ function generateCardsBoard(){
     }
     return arr;
 }
-
+const NAMES = ["Bar", "Kazzaz", "Kazza", "Baruch", "Barboor", "Kazu"];
 function setListeners(socketIo, socket){
     socket.on("quickPlay", () => {
         let player = new Player();
         let foundRoom = false;
         player.id = getRandomName();
+        player.name = NAMES[Math.floor(Math.random() * NAMES.length)];
         for(let room of roomsList) {
             if (room.players.length < maxPlayers) {
                 room.players.push(player);

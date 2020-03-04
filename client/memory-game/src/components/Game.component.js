@@ -18,6 +18,7 @@ export default class Game extends Component{
             currentPlayerIndex: 0,
             myPlayerId: '',
             flippedCard: null,
+            numFlippedCards: 0,
             cards : [],//references to the cards
             cardElms: []//actual gameCard Elments to render
         }
@@ -81,8 +82,8 @@ export default class Game extends Component{
             if(this.state.flippedCard.state.cardClass === card.state.cardClass){
                 let newScore = this.state.score;
                 this.state.currentPlayer === this.state.myPlayerId ? newScore.player1++ : newScore.player2++;
-                this.setState({score: newScore});
-                this.setState({flippedCard : null});
+                const _numFlippedCards = this.state.numFlippedCards + 1;
+                this.setState({score: newScore, flippedCard : null, numFlippedCards: _numFlippedCards});
                 if(this.timer.current)
                     this.timer.current.reset();
             }else {
@@ -153,15 +154,13 @@ export default class Game extends Component{
                 </div>
             )
         }else{
-            let gameShouldEnd = this.state.score.player1 + this.state.score.player2 === (this.state.cards.length*this.state.cards[0].length)/2;
+            let gameShouldEnd = this.state.numFlippedCards === (this.state.cards.length*this.state.cards[0].length)/2;
             if (gameShouldEnd)
                 this.endGame();
         }
         return(
             <div>
-                <div>You are {this.state.myPlayerId}</div>
-                <div>currentPlayer {this.state.currentPlayer}</div>
-                <div>player <span style={{ fontFamily: "Roboto", textDecoration:"underline overline", fontWeight: "bold" }}>{ this.state.players[this.state.currentPlayerIndex].id}</span> it is your turn!</div>
+                <div>Now playing: <span style={{ fontFamily: "Roboto", textDecoration:"underline overline", fontWeight: "bold" }}>{ this.state.players[this.state.currentPlayerIndex].name }</span></div>
                 <div id={"scoreboard"} style={{backgroundColor:"rgba(150,150,150,0.7)", width:"250px", marginLeft:"45%"}}>
                     <div>
                         <Timer ref={this.timer} seconds={6} parentElm={this} style={{fontSize:"20px", color: "red"}}/>
@@ -171,13 +170,13 @@ export default class Game extends Component{
                             <div style={{background:"lightyellow", borderRadius:"15%", width:"55%", height:"55%", marginLeft:"24%"}}>
                                 {this.state.score.player1}
                             </div>
-                            <h1>You</h1>
+                            <h1>{this.state.players[0].name}</h1>
                         </div>
                         <div style={{gridColumn:2, border:"darkred 2px solid"}}>
                             <div style={{background:"lightyellow", borderRadius:"15%", width:"55%", height:"55%", marginLeft:"24%"}}>
                                 {this.state.score.player2}
                             </div>
-                            <h1>opponent</h1>
+                            <h1>{this.state.players[1].name}</h1>
                         </div>
                     </div>
                 </div>
