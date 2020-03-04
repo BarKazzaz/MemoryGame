@@ -65,7 +65,7 @@ export default class Timer extends Component{
 
     render(){
         return(
-            <div style={{color:"red"}} onClick={this.state.started ? this.stop : this.start}>
+            <div style={{color:"red"}}>
                 { this.normalizedTime(this.state.minutes)+":"
                 +this.normalizedTime(this.state.seconds)+":"
                 +this.normalizedTime(this.state.millSeconds) }
