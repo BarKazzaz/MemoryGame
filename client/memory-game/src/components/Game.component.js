@@ -2,9 +2,12 @@ import React, { Component } from "react"
 import GameCard from "./GameCard.component";
 import Timer from "./Timer.component";
 import io from "socket.io-client";
+const path = require('path');
+
 
 const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000': "/";
 const MAX_SCORE = 100;
+const IMAGES = ['1.jpg','2.png','3.jpg', '4.jpg', '5.jpg', '6.jpg'];
 
 export default class Game extends Component{
     constructor(props){
@@ -32,6 +35,7 @@ export default class Game extends Component{
     }
 
     componentDidMount(){
+        this.preloadCardsImages();
         this.state.socket.emit("quickPlay");
         this.state.socket.on("didJoin", (data) => {
             let cards = data.board;
@@ -65,6 +69,14 @@ export default class Game extends Component{
         }
     }
 
+    preloadCardsImages(){
+        IMAGES.map(src => {
+            let image = new Image()
+            image.src = path.join(__dirname,'../../public/cards', src);
+            return image
+        })
+    }
+    
     startGame(){
         this.setState({gameState:"running"});
         setTimeout(()=> this.timer.current.start(), 1000); //call the Timer start() function
