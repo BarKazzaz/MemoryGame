@@ -63,6 +63,11 @@ function setListeners(socketIo, socket){
     socket.on("playerFlipped", (data) => {
         socketIo.sockets.in(data.room).emit("flipCard", data.cardIndexes);
     });
+    socket.on("leaver", (data)=>{
+        //FYI: data = {room : id, player : id}
+        //TODO: DB should be updated
+        socketIo.sockets.in(data.room).emit("leaver");
+    });
 }
 
 module.exports = {

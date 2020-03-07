@@ -4,6 +4,7 @@ import Timer from "./Timer.component";
 import io from "socket.io-client";
 
 const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000': "/";
+const MAX_SCORE = 100;
 
 export default class Game extends Component{
     constructor(props){
@@ -51,10 +52,17 @@ export default class Game extends Component{
         });
         this.state.socket.on("endTurn", ()=>this.endTurn());
         this.state.socket.on("flipCard", (card) => { this.flipCard(card[0], card[1]) });
+        this.state.socket.on("leaver", () => {
+            this.setState({score: {player1: MAX_SCORE, player2: 0}});
+            this.endGame();
+        });
     }
     componentWillUnmount(){
         //TODO: clear all listeners from timer and game
-        //...
+        this.state.socket.removeAllListeners();
+        if(this.state.gameState !== "ended"){
+            this.state.socket.emit("leaver", {room: this.state.room, player: this.state.myPlayerId});
+        }
     }
 
     startGame(){
