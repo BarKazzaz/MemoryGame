@@ -2,12 +2,10 @@ import React, { Component } from "react"
 import GameCard from "./GameCard.component";
 import Timer from "./Timer.component";
 import io from "socket.io-client";
-const path = require('path');
 
 
 const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000': "/";
 const MAX_SCORE = 100;
-const IMAGES = ['1.jpg','2.png','3.jpg', '4.jpg', '5.jpg', '6.jpg'];
 
 export default class Game extends Component{
     constructor(props){
@@ -35,7 +33,6 @@ export default class Game extends Component{
     }
 
     componentDidMount(){
-        this.preloadCardsImages();
         this.state.socket.emit("quickPlay");
         this.state.socket.on("didJoin", (data) => {
             let cards = data.board;
@@ -60,21 +57,21 @@ export default class Game extends Component{
             this.setState({score: {player1: MAX_SCORE, player2: 0}});
             this.endGame();
         });
+        
+        window.addEventListener('beforeunload', this.componentCleanup);
     }
-    componentWillUnmount(){
-        //TODO: clear all listeners from timer and game
+
+    componentCleanup(){
         this.state.socket.removeAllListeners();
         if(this.state.gameState !== "ended"){
             this.state.socket.emit("leaver", {room: this.state.room, player: this.state.myPlayerId});
         }
     }
 
-    preloadCardsImages(){
-        IMAGES.map(src => {
-            let image = new Image()
-            image.src = path.join(__dirname,'../../public/cards', src);
-            return image
-        })
+    componentWillUnmount(){
+        //TODO: clear all listeners from timer and game
+        window.removeEventListener('beforeunload', this.componentCleanup);
+        this.componentCleanup();
     }
     
     startGame(){
@@ -138,6 +135,7 @@ export default class Game extends Component{
         }
         this.timer.current.start();
     }
+
     render(){
         if(this.state.gameState === "pending"){
             return(

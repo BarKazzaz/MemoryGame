@@ -1,5 +1,7 @@
 import React, { Component } from "react"
+// const path = require('path');
 
+const IMAGES = ['1.jpg','2.png','3.jpg', '4.jpg', '5.jpg', '6.jpg'];
 export default class GameCard extends Component{
     constructor(props){
         super(props);
@@ -12,8 +14,20 @@ export default class GameCard extends Component{
         }
         this.parentClickHandler = props.parentClickHandler;
         this.clickHandler = this.clickHandler.bind(this);
+        this.cardsImages = [];
     }
 
+    componentDidMount(){
+        this.preloadCardsImages();
+    }
+
+    preloadCardsImages(){
+        this.cardsImages = IMAGES.map(src => {
+            let image = new Image()
+            image.src = '/cards/'+src;
+            return image
+        })
+    }
     // componentDidUpdate(prevProps){
     //     if(this.props.clickable !== prevProps.clickable)
     //         this.setState({ clickable : this.props.clickable, flipped: this.props.flipped});
