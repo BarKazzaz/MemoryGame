@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import GameCard from "./GameCard.component";
 import Timer from "./Timer.component";
 import io from "socket.io-client";
+import { Link } from "react-router-dom";
 
 
 const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000': "/";
@@ -63,9 +64,7 @@ export default class Game extends Component{
 
     componentCleanup(){
         this.state.socket.removeAllListeners();
-        if(this.state.gameState !== "ended"){
-            this.state.socket.emit("leaver", {room: this.state.room, player: this.state.myPlayerId});
-        }
+        this.state.socket.emit("leaver", {room: this.state.room, player: this.state.myPlayerId});
     }
 
     componentWillUnmount(){
@@ -169,6 +168,9 @@ export default class Game extends Component{
                 <div>
                     <h2>GAME OVER</h2>
                     <p>It's a {resMessage}</p>
+                    <div width="50%">
+                        <Link className="btn" to="/" onClick={this.componentCleanup.bind(this)}> Back </Link>
+                    </div>
                 </div>
             )
         }else{
@@ -178,27 +180,35 @@ export default class Game extends Component{
         }
         return(
             <div>
-                <div>Now playing: <span style={{ fontFamily: "Roboto", textDecoration:"underline overline", fontWeight: "bold" }}>{ this.state.players[this.state.currentPlayerIndex].name }</span></div>
-                <div id={"scoreboard"} style={{backgroundColor:"rgba(150,150,150,0.7)", width:"250px", marginLeft:"45%"}}>
-                    <div>
-                        <Timer ref={this.timer} seconds={6} parentElm={this} style={{fontSize:"20px", color: "red"}}/>
+                <section>
+                    <div>Now playing: 
+                        <span style={{ fontFamily: "Roboto", textDecoration:"underline overline", fontWeight: "bold" }}>{ this.state.players[this.state.currentPlayerIndex].name }</span>
                     </div>
-                    <div style={{display:"grid"}}>
-                        <div style={{gridColumn:1, border:"darkred 2px solid"}}>
-                            <div style={{background:"lightyellow", borderRadius:"15%", width:"55%", height:"55%", marginLeft:"24%"}}>
-                                {this.state.score.player1}
-                            </div>
-                            <h1>{this.state.players[0].name}</h1>
+                </section>
+                <section>
+                    <div id={"scoreboard"} style={{backgroundColor:"rgba(150,150,150,0.7)", width:"250px", marginLeft:"45%"}}>
+                        <div>
+                            <Timer ref={this.timer} seconds={6} parentElm={this} style={{fontSize:"20px", color: "red"}}/>
                         </div>
-                        <div style={{gridColumn:2, border:"darkred 2px solid"}}>
-                            <div style={{background:"lightyellow", borderRadius:"15%", width:"55%", height:"55%", marginLeft:"24%"}}>
-                                {this.state.score.player2}
+                        <div style={{display:"grid"}}>
+                            <div style={{gridColumn:1, border:"darkred 2px solid"}}>
+                                <div style={{background:"lightyellow", borderRadius:"15%", width:"55%", height:"55%", marginLeft:"24%"}}>
+                                    {this.state.score.player1}
+                                </div>
+                                <h1>{this.state.players[0].name}</h1>
                             </div>
-                            <h1>{this.state.players[1].name}</h1>
+                            <div style={{gridColumn:2, border:"darkred 2px solid"}}>
+                                <div style={{background:"lightyellow", borderRadius:"15%", width:"55%", height:"55%", marginLeft:"24%"}}>
+                                    {this.state.score.player2}
+                                </div>
+                                <h1>{this.state.players[1].name}</h1>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div style={{ display:"inline-grid" }}>{this.state.cardElms}</div>
+                </section>
+                <section>
+                    <div style={{ display:"inline-grid" }}>{this.state.cardElms}</div>
+                </section>
             </div>
         )
     }
