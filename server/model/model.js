@@ -13,6 +13,23 @@ function printBar(){
         client.close();
     });
 }
+
+async function getUserByName(userName, passwordName) {
+    await client.connect();
+    const collection = client.db("Legends-Memory-Game").collection("Users");
+    console.log(userName);
+
+    try {
+        await collection.insertOne({ name:  userName,password: passwordName, score: 0 });
+        client.close();
+    }
+    catch (e) {
+        print (e);
+        client.close();
+    };
+
+}
+
 function update(query, newValues, callback){
     client.connect(err => {
         const collection = client.db("Legends-Memory-Game").collection("Users");
@@ -28,9 +45,9 @@ function update(query, newValues, callback){
                 console.log(res);
             }
             Promise.resolve(callback(err,res))
-            .then(client.close());
+                .then(client.close());
         });
     });
 }
 
-module.exports = { printBar : printBar, update : update };
+module.exports = { getUserByName: getUserByName, printBar : printBar, update : update };
