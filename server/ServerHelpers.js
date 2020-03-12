@@ -64,10 +64,25 @@ function setListeners(socketIo, socket){
         socketIo.sockets.in(data.room).emit("flipCard", data.cardIndexes);
     });
     socket.on("leaver", (data)=>{
-        //FYI: data = {room : id, player : id}
+        //data = {room : id, player : id}
         //TODO: DB should be updated
-        socketIo.sockets.in(data.room).emit("leaver");
+        const room = getRoom(data.room);
+        if(!room) return;
+        room.removePlayer(data.player);
+        if(room.players.length > 0)
+            socketIo.sockets.in(data.room).emit("leaver");
+        else
+            deleteRoom(room.name);
     });
+}
+function deleteRoom(name){
+    console.log("deleting room:", name);
+    roomsList = roomsList.filter(r => r.name != name);
+    console.log(roomsList);
+}
+
+function getRoom(name){
+    return roomsList.find(r => r.name === name)
 }
 
 module.exports = {
