@@ -20,9 +20,9 @@ export default class Home extends Component{
               <Route exact path="/">
                 {/* TODO: make this route a navbar component */}
                 <nav>
-                  <Link className="btn" id="login_btn" to="/login"> Login </Link>
-                  <Link className="btn" id="signup_btn" to="/signup">Signup</Link>
-                  <Link className="btn" id="game_btn" to="/game">Quick Game</Link>
+                    <Link className="btn" id="login_btn" to="/login"> Login </Link>
+                    <Link className="btn" id="signup_btn" to="/signup">Signup</Link>
+                    <Link className="btn" id="game_btn" to="/game">Quick Game</Link>
                 </nav>
               </Route>
               <Route path="/login">

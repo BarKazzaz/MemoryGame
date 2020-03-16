@@ -55,8 +55,10 @@ export default class Game extends Component{
         this.state.socket.on("endTurn", ()=>this.endTurn());
         this.state.socket.on("flipCard", (card) => { this.flipCard(card[0], card[1]) });
         this.state.socket.on("leaver", () => {
-            this.setState({score: {player1: MAX_SCORE, player2: 0}});
-            this.endGame();
+            if(this.state.gameState !== "ended"){
+                this.setState({score: {player1: MAX_SCORE, player2: 0}});
+                this.endGame();
+            }
         });
         
         window.addEventListener('beforeunload', this.componentCleanup);
@@ -74,7 +76,7 @@ export default class Game extends Component{
     }
     
     startGame(){
-        this.setState({gameState:"running"});
+        this.setState({gameState: "running"});
         setTimeout(()=> this.timer.current.start(), 1000); //call the Timer start() function
     }
     endGame(){
@@ -105,9 +107,9 @@ export default class Game extends Component{
             }else {
                 this.timer.current.stop();
                 setTimeout(()=>{
-                    card.setState({flipped : false});
+                    card.flip();
                     this.changeTurn();
-                }, 300);
+                }, 500);
             }
         }else
             this.setState({flippedCard : card});
@@ -129,7 +131,7 @@ export default class Game extends Component{
         let nextPlayerIndex = (this.state.currentPlayerIndex + 1)%2;
         this.setState({ currentPlayerIndex: nextPlayerIndex, currentPlayer: ((this.state.players[nextPlayerIndex].id)) });
         if(this.state.flippedCard !== null){
-            this.state.flippedCard.setState({flipped : false});
+            this.state.flippedCard.flip();
             this.setState({flippedCard : null});
         }
         this.timer.current.start();

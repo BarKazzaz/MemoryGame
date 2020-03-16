@@ -10,15 +10,19 @@ export default class GameCard extends Component{
             flipped: false,
             I: props.I,
             J: props.J,
-            clickable: true
+            clickable: true,
+            cardElm: <div className={"GameCard"} onClick={this.clickHandler}></div>
         }
         this.parentClickHandler = props.parentClickHandler;
         this.clickHandler = this.clickHandler.bind(this);
+        this.unflippedCard = <div className={"GameCard"} onClick={this.clickHandler}></div>;
+        this.flippedCard = <div className={"GameCard Card"+this.state.cardClass} style={{backgroundImage: `url("/cards/${this.state.cardClass}.jpg")`}}></div>;
         this.cardsImages = [];
     }
 
     componentDidMount(){
         this.preloadCardsImages();
+        this.setState({cardElm: this.unflippedCard});
     }
 
     preloadCardsImages(){
@@ -34,6 +38,11 @@ export default class GameCard extends Component{
     // }
     flip(){
         this.setState({flipped : !this.state.flipped});
+        console.log("card flipped");
+        if(this.state.flipped)
+            this.setState({cardElm: this.flippedCard});
+        else
+            this.setState({cardElm: this.unflippedCard});
     }
     clickHandler(event){
         if(this.state.clickable){
@@ -42,10 +51,11 @@ export default class GameCard extends Component{
     }
 
     render(){
-        let card = this.state.flipped ?
-        <div className={"GameCard Card"+this.state.cardClass} style={{backgroundImage: `url("/cards/${this.state.cardClass}.jpg")`}}></div>
-        : <div className={"GameCard"} onClick={this.clickHandler}></div>
-        return (card)
+        this.unflippedCard = (<div className={"GameCard"} onClick={this.clickHandler}></div>);
+        this.flippedCard = (<div className={"GameCard Card"+this.state.cardClass} style={{backgroundImage: `url("/cards/${this.state.cardClass}.jpg")`}}></div>);
+        return (
+            this.state.cardElm
+        )
     }
 
 }
