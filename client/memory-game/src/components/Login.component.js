@@ -1,4 +1,5 @@
 import React, { Component }  from 'react';
+import axios from 'axios';
 
 export default class Login extends Component{
 
@@ -13,10 +14,25 @@ export default class Login extends Component{
     }
     compStyle = {}
 
-    handleSubmit(event){
+    async handleSubmit(event){
         //TODO: send request to login to node server (via socket)
+        const response = await axios.get("http://localhost:5001/login", {
+            params: {
+                user: this.state.user,
+                password: this.state.pass
+            }});
+        console.log(response.data);
         console.log(this.state);
-        setTimeout( () => { window.location = '/' }, 500);//redirect to home
+
+        if (response.data === 'found') {
+            window.alert('you have been signed in succefully');
+            setTimeout( () => { window.location = '/' }, 500);
+        }
+        else {
+            // TODO: error in login page
+            window.alert('your user has not found, redirecting to sign up page');
+            setTimeout( () => { window.location = '/signup' }, 500);
+        }
     }
 
     handleInputChange(event){

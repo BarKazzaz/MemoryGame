@@ -4,7 +4,7 @@ const server = require("http").Server(app);
 const socketIo = require("socket.io")(server);
 const path = require("path");
 var bodyParser = require('body-parser');
-const port = 5001;
+const port = 5000;
 const setListeners = require(path.join(__dirname, "ServerHelpers")).setListeners
 const Model = require(path.join(__dirname, "model/model.js"));
 
@@ -15,7 +15,7 @@ socketIo.on("connection", socket => {
 var cors = require('cors');
 
 // use it before all route definitions
-app.use(cors({origin: 'http://localhost:5001'}));
+app.use(cors({origin: 'http://localhost:5000'}));
 app.use(cors())
 app.use(bodyParser.json());
 
@@ -27,6 +27,8 @@ if (process.env.NODE_ENV === "production"){// if heroku is running
     });
 
 }
+
+Model.initConnection();
 app.get("/bar", (req, res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     let users = [{name:"bar", score: 0}]
@@ -39,7 +41,19 @@ app.get("/bar", (req, res)=>{
     res.json(users);
 });
 
+app.get("/login", (req, res)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let userName = req.query.user;
+    let passwordname = req.query.password;
 
+    const userFound = Model.findUserByName(userName, passwordname);
+    if (userFound != null) {
+        res.end('found');
+    }
+    else {
+        res.end('not found');
+    }
+});
 
 app.post("/update", (req, _res) => {
     //request should be : {"name":"Kazzaz", "vals": { "name" : "Blablabla", "score" : 22} }
