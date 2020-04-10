@@ -37,24 +37,21 @@ async function insertUser(userName, passwordName) {
 
 }
 async function findUserByName(userName, password) {
-    await client.connect();
+
     const query = { "name": userName, "password" : password};
     const collection = client.db("Legends-Memory-Game").collection("Users");
 
     var userFound = await collection.findOne(query);
-    await client.close();
+
     return userFound;
 }
 
 function update(query, newValues, callback){
         const collection = client.db("Legends-Memory-Game").collection("Users");
-        // perform actions on the collection object
-        // collection.updateOne(query, newValues, (err, res) => {
         _query = {name:"Bar"};
         _newValues = {$set : {name:"Kazzaz", score:10} };
         collection.updateOne(query, newValues, (err, res) => {
-            // Promise.resolve(callback(err, res))
-            // .then(client.close());
+
             logger = (_err, _res) => {
                 if(err) console.log(err);
                 console.log(res);
