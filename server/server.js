@@ -36,7 +36,7 @@ app.get("/bar", (req, res)=>{
     let passwordname = req.query.password;
 
 
-    Model.getUserByName(userName, passwordname);
+    Model.insertUser(userName, passwordname);
 
     res.json(users);
 });

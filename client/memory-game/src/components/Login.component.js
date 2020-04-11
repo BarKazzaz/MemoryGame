@@ -16,7 +16,7 @@ export default class Login extends Component{
 
     async handleSubmit(event){
         //TODO: send request to login to node server (via socket)
-        const response = await axios.get("http://localhost:5001/login", {
+        const response = await axios.get("http://localhost:5000/login", {
             params: {
                 user: this.state.user,
                 password: this.state.pass

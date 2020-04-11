@@ -29,7 +29,7 @@ export default class SignUp extends Component{
 
     async handleSubmit() {
         console.log(this.state);
-        const response = await axios.get("http://localhost:5001/bar", {
+        const response = await axios.get("http://localhost:5000/bar", {
             params: {
                 user: this.state.userToRegister,
                 password: this.state.passToRegister
