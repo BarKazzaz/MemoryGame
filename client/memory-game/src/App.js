@@ -4,6 +4,8 @@ import './App.css';
 import SignUp from './components/SignUp.component'
 import Login from './components/Login.component'
 import Home from './components/Home.component'
+import Map from "./components/Map.component";
+
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
           </Route>
           <Route path="/forgot">
             <Login />
+          </Route>
+          <Route path="/map">
+            <Map />
           </Route>
           <Route path="*">
             {/* TODO: make this a "default" component */}
