@@ -34,9 +34,10 @@ app.get("/bar", (req, res)=>{
     let users = [{name:"bar", score: 0}]
     let userName = req.query.user;
     let passwordname = req.query.password;
+    let email = req.query.email;
 
 
-    Model.insertUser(userName, passwordname);
+    Model.insertUser(userName, passwordname,email);
 
     res.json(users);
 });

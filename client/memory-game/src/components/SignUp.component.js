@@ -7,8 +7,8 @@ export default class SignUp extends Component{
         this.state = {
             userToRegister: "",
             passToRegister: "",
-            confpassToRegister: ""
-
+            confpassToRegister: "",
+            email: ""
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -32,7 +32,8 @@ export default class SignUp extends Component{
         const response = await axios.get("http://localhost:5000/bar", {
             params: {
                 user: this.state.userToRegister,
-                password: this.state.passToRegister
+                password: this.state.passToRegister,
+                email: this.state.email
             }});
         console.log(response.data);
     }
@@ -50,9 +51,16 @@ export default class SignUp extends Component{
         onChange={this.handleInputChange}
         />
         </label>
-
-
-
+            <br/>
+                <label>
+                    Email:
+                    <input
+                        name="email"
+                        type="text"
+                        onChange={this.handleInputChange}
+                    />
+                </label>
+        <br/>
         <label>
         Password:
     <input

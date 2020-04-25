@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
+import {BrowserRouter as Router, Switch} from "react-router-dom";
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -14,6 +15,7 @@ class Map extends Component {
 
     render() {
         return (
+
             // Important! Always set the container height explicitly
             <div style={{ height: '100vh', width: '100%' }}>
                 <GoogleMapReact
@@ -27,7 +29,10 @@ class Map extends Component {
                         text="My Marker"
                     />
                 </GoogleMapReact>
+
+
             </div>
+
         );
     }
 }

@@ -23,12 +23,12 @@ function printBar(){
         });
 }
 
-async function insertUser(userName, passwordName) {
+async function insertUser(userName, passwordName,email) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     console.log(userName);
 
     try {
-        await collection.insertOne({ name:  userName,password: passwordName, score: 0 });
+        await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email });
 
     }
     catch (e) {
@@ -42,7 +42,8 @@ async function findUserByName(userName, password) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
 
     var userFound = await collection.findOne(query);
-
+    console.log(userFound.name);
+    console.log(userFound.email);
     return userFound;
 }
 

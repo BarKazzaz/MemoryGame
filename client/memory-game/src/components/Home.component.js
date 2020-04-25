@@ -8,12 +8,32 @@ import Map from "./Map.component";
 
 
 export default class Home extends Component{
+    filteredContacts;
+
+    constructor() {
+        super();
+        this.state ={
+            search: 'Level Up'
+        }
+    }
+
+    updateSearch(event){
+        this.setState({search:event.target.value.substr(0,20)})
+    }
 
     render(){
         return(
         <div className="Home">
+            <form action="/action_page.php">
+                <label htmlFor="gsearch">Search:</label>
+                <input type="search" id="gsearch" name="gsearch"></input>
+                    <input type="submit"></input>
+            </form>
           <header className="Home-header">
-            <h1 className="home-title">Memory Game</h1>
+                  <iframe src="http://free.timeanddate.com/clock/i799vdmy/n676"   frameBorder="0" width="114"
+                          height="18"></iframe>
+
+              <h1 className="home-title">Memory Game</h1>
           </header>
           <Router>
             <Switch>
