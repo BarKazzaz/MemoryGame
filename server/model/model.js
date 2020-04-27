@@ -23,6 +23,16 @@ function printBar(){
         });
 }
 
+function showDetaels(){
+    const collection = client.db("Legends-Memory-Game").collection("Users");
+    let usersDet = collection.find().toArray((err, res)=>{
+        if(err) console.error(err);
+        else console.log(res);
+    });
+    return usersDet;
+}
+
+
 async function insertUser(userName, passwordName,email) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     console.log(userName);
@@ -42,8 +52,8 @@ async function findUserByName(userName, password) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
 
     var userFound = await collection.findOne(query);
-    console.log(userFound.name);
-    console.log(userFound.email);
+    //console.log(userFound.name);
+    //console.log(userFound.email);
     return userFound;
 }
 
@@ -60,4 +70,4 @@ function update(query, newValues, callback){
         });
 }
 
-module.exports = { findUserByName:findUserByName, insertUser: insertUser, printBar : printBar, update : update, initConnection : initConnection };
+module.exports = { showDetaels:showDetaels,findUserByName:findUserByName, insertUser: insertUser, printBar : printBar, update : update, initConnection : initConnection };

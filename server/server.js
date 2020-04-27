@@ -42,18 +42,51 @@ app.get("/bar", (req, res)=>{
     res.json(users);
 });
 
+app.get("/admin",(req,res)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    const userFound = Model.showDetaels();
+    // console.log(userFound);
+    res.end('usersDet');
+
+});
+
 app.get("/login", (req, res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     let userName = req.query.user;
     let passwordname = req.query.password;
 
-    const userFound = Model.findUserByName(userName, passwordname);
-    if (userFound != null) {
-        res.end('found');
-    }
-    else {
-        res.end('not found');
-    }
+    Model.findUserByName(userName, passwordname).then(userFound => {
+        console.log(userFound);
+        if(userFound != null){
+            if(userName == 'Admin' && passwordname == '8Db012598') {
+                console.log("its work");
+                res.end('adminPermission');
+            }
+            else {
+                console.log("user work");
+                res.end('found');
+            }
+        }
+        else {
+            console.log("user doesnt work");
+            res.end('not found');
+        }
+    } );
+    //console.log(userFound);
+    // if(userFound != null){
+    //     if(userName == 'Admin') {
+    //         console.log("its work");
+    //         res.end('adminPermission');
+    //     }
+    //     else {
+    //         console.log("user work");
+    //         res.end('found');
+    //     }
+    // }
+    // else {
+    //     console.log("user doesnt work");
+    //     res.end('not found');
+    // }
 });
 
 app.post("/update", (req, _res) => {

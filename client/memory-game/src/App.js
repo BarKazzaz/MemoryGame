@@ -5,6 +5,7 @@ import SignUp from './components/SignUp.component'
 import Login from './components/Login.component'
 import Home from './components/Home.component'
 import Map from "./components/Map.component";
+import Admin from "./components/Admin.component";
 
 
 function App() {
@@ -13,6 +14,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <Home/>
+          </Route>
+          <Route exact path="/admin">
+            <Admin/>
           </Route>
           <Route path="/signup">
             <SignUp x={2} />

@@ -24,10 +24,20 @@ export default class Login extends Component{
         console.log(response.data);
         console.log(this.state);
 
-        if (response.data === 'found') {
-            window.alert('you have been signed in succefully');
+
+        if(response.data === 'adminPermission')
+        {
+            window.alert('you rule');
             // console.log(response.data)
-            setTimeout( () => { window.location = '/' }, 500);
+            setTimeout( () => { window.location = '/admin' }, 500);
+        }
+        else if (response.data === 'found') {
+                window.alert('you have been signed in succefully');
+                // console.log(response.data)
+                setTimeout(() => {
+                    window.location = '/'
+                }, 500);
+
         }
         else {
             // TODO: error in login page
