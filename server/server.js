@@ -35,17 +35,43 @@ app.get("/bar", (req, res)=>{
     let userName = req.query.user;
     let passwordname = req.query.password;
     let email = req.query.email;
+    let country = req.query.country;
 
-
-    Model.insertUser(userName, passwordname,email);
+    Model.insertUser(userName, passwordname,email,country);
 
     res.json(users);
 });
 
-app.get("/admin",(req,res)=>{
+
+
+app.get("/update", (req, _res) => {
+    const _name = req.query.user;
+    const password = req.query.password;
+    const email = req.query.email;
+    const country = req.query.country;
+    console.log(_name);
+    console.log(password);
+    console.log(email);
+    let myQuery = { name : _name , email : email, password : password};
+    let newVals = { $set: req.body.vals };
+    Model.update(myQuery, newVals, (err, res) => {
+        err ? console.error(err) : _res.json({"updated": req.body})
+    });
+});
+
+app.get("/search",(req,res)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    const country = req.query.country;
+    const userFound = Model.findUserByCountry(country);
+    console.log(userFound);
+    res.end('usersDet');
+
+});
+
+app.get("/list",(req,res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     const userFound = Model.showDetaels();
-    // console.log(userFound);
+     console.log(userFound);
     res.end('usersDet');
 
 });
@@ -55,7 +81,7 @@ app.get("/login", (req, res)=>{
     let userName = req.query.user;
     let passwordname = req.query.password;
 
-    Model.findUserByName(userName, passwordname).then(userFound => {
+    Model.findUserByNameAndPassword(userName, passwordname).then(userFound => {
         console.log(userFound);
         if(userFound != null){
             if(userName == 'Admin' && passwordname == '8Db012598') {
@@ -72,33 +98,9 @@ app.get("/login", (req, res)=>{
             res.end('not found');
         }
     } );
-    //console.log(userFound);
-    // if(userFound != null){
-    //     if(userName == 'Admin') {
-    //         console.log("its work");
-    //         res.end('adminPermission');
-    //     }
-    //     else {
-    //         console.log("user work");
-    //         res.end('found');
-    //     }
-    // }
-    // else {
-    //     console.log("user doesnt work");
-    //     res.end('not found');
-    // }
 });
 
-app.post("/update", (req, _res) => {
-    //request should be : {"name":"Kazzaz", "vals": { "name" : "Blablabla", "score" : 22} }
-    const _name = req.body.name;
-    console.log(_name);
-    let myQuery = { name : _name };
-    let newVals = { $set: req.body.vals };
-    Model.update(myQuery, newVals, (err, res) => {
-        err ? console.error(err) : _res.json({"updated": req.body})
-    });
-});
+
 
 server.listen(port, (err) => {
     if (err) console.error(err);
