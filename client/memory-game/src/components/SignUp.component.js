@@ -1,6 +1,8 @@
 import React, { Component }  from 'react';
 import axios from 'axios';
 
+const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000': "/";
+
 export default class SignUp extends Component{
     constructor(props){
         super(props);
@@ -30,7 +32,7 @@ export default class SignUp extends Component{
 
     async handleSubmit() {
         console.log(this.state);
-        const response = await axios.get("http://localhost:5000/bar", {
+        const response = await axios.get(SERVER_ADDRESS+'/bar', {
             params: {
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,

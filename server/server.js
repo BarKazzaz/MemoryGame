@@ -4,7 +4,7 @@ const server = require("http").Server(app);
 const socketIo = require("socket.io")(server);
 const path = require("path");
 var bodyParser = require('body-parser');
-const port = 5000;
+const port = process.env.PORT || 5000;
 const setListeners = require(path.join(__dirname, "ServerHelpers")).setListeners
 const Model = require(path.join(__dirname, "model/model.js"));
 
@@ -15,7 +15,7 @@ socketIo.on("connection", socket => {
 var cors = require('cors');
 
 // use it before all route definitions
-app.use(cors({origin: 'http://localhost:5000'}));
+app.use(cors({origin: `http://localhost:${port}`}));
 app.use(cors())
 app.use(bodyParser.json());
 
