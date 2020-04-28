@@ -34,7 +34,7 @@ function showDetaels(){
 
 async function findUserByCountry(country){
     const collection = client.db("Legends-Memory-Game").collection("Users");
-    let usersDet = await collection.find(    { "country":   "italy"  }).toArray((err, res)=>{
+    let usersDet = await collection.find(    { "country":   country  }).toArray((err, res)=>{
         if(err) console.error(err);
         else console.log(res);
     });
