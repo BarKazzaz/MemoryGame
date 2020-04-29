@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
-import {BrowserRouter as Router, Switch} from "react-router-dom";
+// import {BrowserRouter as Router, Switch} from "react-router-dom";
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 

@@ -30,7 +30,7 @@ export default class Home extends Component{
                     <input type="submit"></input>
             </form>
           <header className="Home-header">
-                  <iframe src="http://free.timeanddate.com/clock/i799vdmy/n676"   frameBorder="0" width="114"
+                  <iframe title="clock iframe" src="http://free.timeanddate.com/clock/i799vdmy/n676"   frameBorder="0" width="114"
                           height="18"></iframe>
 
               <h1 className="home-title">Memory Game</h1>
