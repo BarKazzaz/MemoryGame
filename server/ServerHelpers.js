@@ -63,6 +63,9 @@ function setListeners(socketIo, socket){
     socket.on("playerFlipped", (data) => {
         socketIo.sockets.in(data.room).emit("flipCard", data.cardIndexes);
     });
+    socket.on("chatMsg", (data) => {
+        socketIo.sockets.in(data.room).emit("chatMsg", data.message);
+    });
     socket.on("leaver", (data)=>{
         //data = {room : id, player : id}
         //TODO: DB should be updated
