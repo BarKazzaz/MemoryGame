@@ -2,6 +2,11 @@
 const path = require("path");
 const Room = require(path.join(__dirname, "Room"));
 const Player = require(path.join(__dirname, "Player"));
+const ClassifierPromise =  require(path.join(__dirname, "MessageClassifier"));
+let MessageClassifier;
+ClassifierPromise().then((cls)=>{
+    MessageClassifier = cls;
+})
 
 /*-- Vars --*/
 const maxPlayers = 2;
@@ -64,6 +69,10 @@ function setListeners(socketIo, socket){
         socketIo.sockets.in(data.room).emit("flipCard", data.cardIndexes);
     });
     socket.on("chatMsg", (data) => {
+        //TODO: check for bad words
+        // let msgClass = MessageClassifier.classify(data.message.content);
+        let msgClass = MessageClassifier.getClassifications(data.message.content);
+        console.log(msgClass);
         socketIo.sockets.in(data.room).emit("chatMsg", data.message);
     });
     socket.on("leaver", (data)=>{

@@ -4,3 +4,4 @@ client/memory-game/node_modules/
 */node_modules
 node_modules/*
 package-lock.json
+server/store.json
