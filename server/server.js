@@ -60,6 +60,17 @@ app.get("/update", (req, _res) => {
     });
 });
 
+app.get("/remove", (req, _res) => {
+    const country = req.query.country;
+    console.log(country);
+    let myQuery = { country : country};
+    let newVals = { $set: req.body.vals };
+    Model.remove(myQuery,  (err, res) => {
+        err ? console.error(err) : _res.json({"remove": req.body})
+    });
+});
+
+
 app.get("/search",(req,res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     const country = req.query.country;

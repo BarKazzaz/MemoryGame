@@ -39,7 +39,9 @@ async function findUserByCountry(country){
         if(err) console.error(err);
         else console.log(res);
     });
-    return usersDet;
+    console.log(usersDet)
+   // return usersDet;
+
 }
 
 async function update(query, newValues, callback) {
@@ -66,6 +68,17 @@ async function update(query, newValues, callback) {
 }
 
 
+async function remove(query,callback) {
+    const collection = client.db("Legends-Memory-Game").collection("Users");
+    console.log(query.country);
+    const country = query.country;
+        return new Promise((resolve, reject)=>{
+            collection.deleteOne({"country": country})
+        });
+}
+
+
+
 async function insertUser(userName, passwordName,email,country,permissions) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     console.log(userName);
@@ -79,6 +92,7 @@ async function insertUser(userName, passwordName,email,country,permissions) {
     };
 
 }
+
 async function findUserByName(userName) {
     const query = { "name": userName};
     const collection = client.db("Legends-Memory-Game").collection("Users");
@@ -94,4 +108,4 @@ async function findUserByNameAndPassword(userName, password) {
 }
 
 
-module.exports = { showDetaels:showDetaels,findUserByName:findUserByName, insertUser: insertUser, printBar : printBar,findUserByNameAndPassword:findUserByNameAndPassword, update : update, findUserByCountry:findUserByCountry,initConnection : initConnection};
+module.exports = { showDetaels:showDetaels,findUserByName:findUserByName, insertUser: insertUser, printBar : printBar, remove:remove,findUserByNameAndPassword:findUserByNameAndPassword, update : update, findUserByCountry:findUserByCountry,initConnection : initConnection};

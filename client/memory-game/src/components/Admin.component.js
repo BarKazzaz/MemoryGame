@@ -22,11 +22,14 @@ export default class Admin extends Component{
         this.handleSubmitUpdate = this.handleSubmitUpdate.bind(this);
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
         this.handleSubmitView = this.handleSubmitView.bind(this);
+        this.handleSubmitRemove = this.handleSubmitRemove.bind(this);
+
         this.handleInputChangeUpdate = this.handleInputChangeUpdate.bind(this);
+        this.handleInputChangeRemove = this.handleInputChangeRemove.bind(this);
         this.handleInputChangeSearch = this.handleInputChangeSearch.bind(this);
         this.renderTableData = this.renderTableData.bind(this);
         this.renderTableHeader = this.renderTableHeader.bind(this);
-
+//        this.renderTableDataSearch = this.renderTableDataSearch.bind(this);
     }
 
     componentDidMount(): void {
@@ -39,10 +42,16 @@ export default class Admin extends Component{
                 console.log(view)
             }
             });
-        axios.get("http://localhost:5000/search").then((search) => {
-         //   console.log(search.data)
-            this.setState({searchList: search.data, status: 'ready'});
-        })
+        // axios.get("http://localhost:5000/search").then((search) => {
+        //     if(search.data.type === 'OK'){
+        //         console.log(search.data.content);
+        //         this.setState({usersList: search.data.content, status: 'ready'});
+        //     }else {
+        //         this.setState({status: 'error', statusMessage: `An error occoured:${search.data.content}`})
+        //         console.log(search)
+        //     }
+        //     this.setState({searchList: search.data, status: 'ready'});
+        // })
     }
 
     handleInputChangeUpdate(event) {
@@ -53,6 +62,16 @@ export default class Admin extends Component{
             [name]: value
         })
     }
+
+    handleInputChangeRemove(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        this.setState({
+            [name]: value
+        })
+    }
+
 
     handleInputChangeSearch(event) {
         const target = event.target;
@@ -72,6 +91,17 @@ export default class Admin extends Component{
                 email: this.state.email
             }});
         console.log(update.data);
+    }
+
+    async handleSubmitRemove() {
+//        console.log(this.state);
+        const remove = await axios.get("http://localhost:5000/remove", {
+            params: {
+                country: this.state.country
+                //password: this.state.passToRegister,
+         //       email: this.state.email
+            }});
+        console.log(remove.data);
     }
 
     async handleSubmitView() {
@@ -115,6 +145,25 @@ export default class Admin extends Component{
         })
     }
 
+    // renderTableDataSearch() {
+    //     return this.state.searchList.map((user, index) => {
+    //         const { name, password, score, email, country, rudeMessages, Permissions,numOfGames,numOfVictoryGames } = user //destructuring
+    //         return (
+    //
+    //             <tr key={name}>
+    //                 <td>{name}</td>
+    //                 <td>{password}</td>
+    //                 <td>{score}</td>
+    //                 <td>{email}</td>
+    //                 <td>{country}</td>
+    //                 <td>{Permissions}</td>
+    //                 <td>{rudeMessages}</td>
+    //                 <td>{numOfGames}</td>
+    //                 <td>{numOfVictoryGames}</td>
+    //             </tr>
+    //         )
+    //     })
+    // }
 
     async handleSubmitSearch() {
 
@@ -136,6 +185,13 @@ export default class Admin extends Component{
                     {this.renderTableData()}
                     </tbody>
                 </table>
+                {/*<br/>*/}
+                {/*<table id='searchList'>*/}
+                {/*    <tbody>*/}
+                {/*    <tr>{this.renderTableHeader()}</tr>*/}
+                {/*    {this.renderTableDataSearch()}*/}
+                {/*    </tbody>*/}
+                {/*</table>*/}
                 <br/>
                 <form>
                     <label>
@@ -178,6 +234,50 @@ export default class Admin extends Component{
                 <br/>
                 <br/>
                 <br/>
+                <br/>
+
+
+
+
+
+
+
+
+                <br/>
+                <form>
+                    <label>
+                        User name:
+                        <input
+                            name="country"
+                            type="text"
+                            onChange={this.handleInputChangeRemove}
+                        />
+                    </label>
+                    <br/>
+                    {/*<label>*/}
+                    {/*    Email:*/}
+                    {/*    <input*/}
+                    {/*        name="email"*/}
+                    {/*        type="text"*/}
+                    {/*        onChange={this.handleInputChangeRemove}*/}
+                    {/*    />*/}
+                    {/*</label>*/}
+                    {/*<br/>*/}
+                    {/*<label>*/}
+                    {/*    Password:*/}
+                    {/*    <input*/}
+                    {/*        name="passToRegister"*/}
+                    {/*        // value={this.state.user}*/}
+                    {/*        type="password"*/}
+                    {/*        onChange={this.handleInputChangeRemove}*/}
+                    {/*    />*/}
+                    {/*</label>*/}
+
+                    <br/>
+
+
+                </form>
+                <button onClick={this.handleSubmitRemove}>Remove Sumbit</button>
                 <br/>
                 <button onClick={this.handleSubmitView}>View Sumbit</button>
                 <br/>
