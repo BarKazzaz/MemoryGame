@@ -69,12 +69,11 @@ app.get("/search",(req,res)=>{
 
 });
 
-app.get("/list",(req,res)=>{
+app.get("/listUsers",(req,res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
-    const userFound = Model.showDetaels();
-     console.log(userFound);
-    res.end('usersDet');
-
+    Model.showDetaels().then((data)=>{
+        res.json(data)
+    }).catch(err => res.end('error getting users'))
 });
 
 app.get("/login", (req, res)=>{

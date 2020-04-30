@@ -25,11 +25,12 @@ function printBar(){
 
 function showDetaels(){
     const collection = client.db("Legends-Memory-Game").collection("Users");
-    let usersDet = collection.find().toArray((err, res)=>{
-        if(err) console.error(err);
-        else console.log(res);
+    return new Promise((resolve, reject)=>{
+        collection.find().toArray((err, res)=>{
+            if(err) reject(res);
+            else resolve(res);
+        });
     });
-    return usersDet;
 }
 
 async function findUserByCountry(country){
