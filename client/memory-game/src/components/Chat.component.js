@@ -28,12 +28,17 @@ export default class Timer extends Component {
         })
     }
 
+    getTime(){
+        let now = new Date();
+        let t = now.toTimeString().substr(0,5);
+        return t;
+    }
     addMessage(from, content) {
         if (!content) return;
         let side;
         if (from === 'me') side = 'left';
         else side = 'darker right';
-        let msg = <div className="chat_container"><div className={`msg_container ${side}`}><p>{content}</p><span className="time-right">11:00</span></div></div>
+        let msg = <div className="chat_container"><div className={`msg_container ${side}`}><p>{content}</p><span className="time-right">{this.getTime()}</span></div></div>
         this.state.messages.push(msg);
         this.forceUpdate();
     }
