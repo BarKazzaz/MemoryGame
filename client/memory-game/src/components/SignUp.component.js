@@ -11,7 +11,8 @@ export default class SignUp extends Component{
             passToRegister: "",
             confpassToRegister: "",
             email: "",
-            country: ""
+            country: "",
+            permissions: "user"
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -37,7 +38,8 @@ export default class SignUp extends Component{
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
                 email: this.state.email,
-                country:this.state.country
+                country:this.state.country,
+                permissions:this.state.permissions
             }});
         console.log(response.data);
         setTimeout( () => { window.location = '/' }, 500);
@@ -85,7 +87,15 @@ export default class SignUp extends Component{
         onChange={this.handleInputChange}
         />
         </label>
-
+                {/*<label>*/}
+                {/*    permissions:*/}
+                {/*    <input*/}
+                {/*        name="permissions"*/}
+                {/*        // value={this.state.user}*/}
+                {/*        type="text"*/}
+                {/*        onChange={this.handleInputChange}*/}
+                {/*    />*/}
+                {/*</label>*/}
 
 
         </form>

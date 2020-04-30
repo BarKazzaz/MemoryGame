@@ -21,19 +21,22 @@ export default class Login extends Component{
                 user: this.state.user,
                 password: this.state.pass
             }});
-        console.log(response.data);
+        console.log(response.data.permissions);
         console.log(this.state);
+        localStorage.setItem('permission','');
 
 
-        if(response.data === 'adminPermission')
+        if(response.data === 'admin')
         {
             window.alert('you rule');
+            localStorage.setItem('permission','admin');
             // console.log(response.data)
             setTimeout( () => { window.location = '/admin' }, 500);
         }
-        else if (response.data === 'found') {
+        else if (response.data === 'user') {
                 window.alert('you have been signed in succefully');
                 // console.log(response.data)
+            localStorage.setItem('permission','user');
                 setTimeout(() => {
                     window.location = '/'
                 }, 500);
@@ -41,9 +44,12 @@ export default class Login extends Component{
         }
         else {
             // TODO: error in login page
+            localStorage.setItem('permission','guest');
             window.alert('your user has not found, redirecting to sign up page');
             setTimeout( () => { window.location = '/signup' }, 500);
         }
+        console.log(localStorage.getItem('permission'))
+
     }
 
     handleInputChange(event){

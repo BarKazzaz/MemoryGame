@@ -65,12 +65,12 @@ async function update(query, newValues, callback) {
 }
 
 
-async function insertUser(userName, passwordName,email,country) {
+async function insertUser(userName, passwordName,email,country,permissions) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     console.log(userName);
 
     try {
-        await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email, country:country });
+        await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email, country:country,permissions:permissions });
 
     }
     catch (e) {

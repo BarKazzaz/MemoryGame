@@ -19,6 +19,8 @@ export default class Home extends Component{
 
     updateSearch(event){
         this.setState({search:event.target.value.substr(0,20)})
+        localStorage.getItem('permission')
+        console.log(localStorage.getItem('permission'))
     }
 
     render(){

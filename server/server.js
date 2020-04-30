@@ -36,8 +36,9 @@ app.get("/bar", (req, res)=>{
     let passwordname = req.query.password;
     let email = req.query.email;
     let country = req.query.country;
+    let permissions = req.query.permissions;
 
-    Model.insertUser(userName, passwordname,email,country);
+    Model.insertUser(userName, passwordname,email,country,permissions);
 
     res.json(users);
 });
@@ -84,18 +85,7 @@ app.get("/login", (req, res)=>{
     Model.findUserByNameAndPassword(userName, passwordname).then(userFound => {
         console.log(userFound);
         if(userFound != null){
-            if(userName == 'Admin' && passwordname == '8Db012598') {
-                console.log("its work");
-                res.end('adminPermission');
-            }
-            else {
-                console.log("user work");
-                res.end('found');
-            }
-        }
-        else {
-            console.log("user doesnt work");
-            res.end('not found');
+            res.end(userFound.permissions)
         }
     } );
 });
