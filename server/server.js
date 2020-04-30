@@ -71,9 +71,14 @@ app.get("/search",(req,res)=>{
 
 app.get("/listUsers",(req,res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
+    let msg;
     Model.showDetaels().then((data)=>{
-        res.json(data)
-    }).catch(err => res.end('error getting users'))
+        msg = {'type': 'OK', 'content': data}
+        res.json(msg)
+    }).catch(err => {
+        msg = {'type':'ERROR','content': err};
+        res.json(msg)
+    })
 });
 
 app.get("/login", (req, res)=>{

@@ -12,6 +12,7 @@ export default class Admin extends Component{
             search : "",
             country: "",
             status: "pending",
+            statusMsg:'Loading...',
             // view: axios.get("http://localhost:5000/listUsers", {params: {}})
 
             usersList: [],
@@ -30,11 +31,16 @@ export default class Admin extends Component{
 
     componentDidMount(): void {
         axios.get("http://localhost:5000/listUsers").then((view) => {
-            console.log(view.data)
-            this.setState({usersList: view.data, status: 'ready'});
-        })
+            if(view.data.type === 'OK'){
+                console.log(view.data.content);
+                this.setState({usersList: view.data.content, status: 'ready'});
+            }else {
+                this.setState({status: 'error', statusMessage: `An error occoured:${view.data.content}`})
+                console.log(view)
+            }
+            });
         axios.get("http://localhost:5000/search").then((search) => {
-            console.log(search.data)
+         //   console.log(search.data)
             this.setState({searchList: search.data, status: 'ready'});
         })
     }
@@ -120,7 +126,7 @@ export default class Admin extends Component{
     }
 
     render(){
-        if(this.state.status === 'pending') return (<p>Loading...</p>)
+        if(this.state.status !== 'ready') return (<p>{this.state.statusMessage}</p>)
         return(
             <div style={this.compStyle}>
                 {/* <form onSubmit={this.handleSubmit}> */}
