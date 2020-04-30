@@ -87,6 +87,9 @@ app.get("/login", (req, res)=>{
         if(userFound != null){
             res.end(userFound.permissions)
         }
+        else{
+            res.end("guest")
+        }
     } );
 });
 

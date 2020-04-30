@@ -42,7 +42,7 @@ export default class Login extends Component{
                 }, 500);
 
         }
-        else {
+        else if (response.data === 'guest'){
             // TODO: error in login page
             localStorage.setItem('permission','guest');
             window.alert('your user has not found, redirecting to sign up page');
