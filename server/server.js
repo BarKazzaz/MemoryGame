@@ -29,13 +29,13 @@ if (process.env.NODE_ENV === "production"){// if heroku is running
 }
 
 Model.initConnection();
-app.get("/bar", (req, res)=>{
+app.get("/signup", (req, res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let users = [{name:"bar", score: 0}]
     let userName = req.query.user;
     let passwordname = req.query.password;
     let email = req.query.email;
     let country = req.query.country;
+<<<<<<< HEAD
     let Permissions = req.query.Permissions;
     let messages = 0;
     let rudeMessages = [''];
@@ -45,6 +45,11 @@ app.get("/bar", (req, res)=>{
     Model.insertUser(userName, passwordname,email,country,Permissions,messages,rudeMessages,numOfGames,numOfVictoryGames);
 
     res.json(users);
+=======
+    let permissions = req.query.permissions;
+    Model.insertUser(userName, passwordname, email, country, permissions);
+    res.json({type:'OK', content: 'done'});
+>>>>>>> 612e32b... fixed view flow
 });
 
 
@@ -100,14 +105,17 @@ app.get("/login", (req, res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     let userName = req.query.user;
     let passwordname = req.query.password;
-
+    let msg;
     Model.findUserByNameAndPassword(userName, passwordname).then(userFound => {
         console.log(userFound);
-        if(userFound != null){
-            res.end(userFound.permissions)
+        if(userFound){
+            userFound = {'name': userFound.name, 'country': userFound.country, 'permissions': userFound.Permissions}
+            msg = {'type': 'OK', 'content': userFound}
+            res.json(msg)
         }
         else{
-            res.end("guest")
+            msg = {'type':'ERROR','content': {'permissions': 'guest'}};
+            res.json(msg)
         }
     } );
 });

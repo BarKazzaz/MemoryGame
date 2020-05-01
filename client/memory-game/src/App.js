@@ -15,20 +15,8 @@ function App() {
           <Route exact path="/">
             <Home/>
           </Route>
-          <Route exact path="/admin">
-            <Admin/>
-          </Route>
-          <Route path="/signup">
-            <SignUp x={2} />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/forgot">
-            <Login />
-          </Route>
-          <Route path="/map">
-            <Map />
+          <Route exact path="/signup">
+            <SignUp/>
           </Route>
           <Route path="*">
             {/* TODO: make this a "default" component */}

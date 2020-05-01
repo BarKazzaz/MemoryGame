@@ -84,8 +84,12 @@ async function insertUser(userName, passwordName,email,country,Permissions,messa
     console.log(userName);
 
     try {
+<<<<<<< HEAD
         await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email, country:country,Permissions:Permissions,messages:messages,rudeMessages:rudeMessages,numOfGames:numOfGames,numOfVictoryGames:numOfVictoryGames });
 
+=======
+        await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email, country:country, Permissions:permissions });
+>>>>>>> 612e32b... fixed view flow
     }
     catch (e) {
         print (e);
@@ -104,6 +108,7 @@ async function findUserByNameAndPassword(userName, password) {
     const query = { "name": userName, "password" : password};
     const collection = client.db("Legends-Memory-Game").collection("Users");
     var userFound = await collection.findOne(query);
+    console.log(userFound);
     return userFound;
 }
 

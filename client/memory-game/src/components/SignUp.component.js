@@ -1,10 +1,10 @@
-import React, { Component }  from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
-const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000': "/";
+const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "/";
 
-export default class SignUp extends Component{
-    constructor(props){
+export default class SignUp extends Component {
+    constructor(props) {
         super(props);
         this.state = {
             userToRegister: "",
@@ -22,7 +22,7 @@ export default class SignUp extends Component{
         this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    bar(x, y){
+    bar(x, y) {
         return x * y;
     }
 
@@ -37,11 +37,12 @@ export default class SignUp extends Component{
 
     async handleSubmit() {
         console.log(this.state);
-        const response = await axios.get(SERVER_ADDRESS+'/bar', {
+        const response = await axios.get(SERVER_ADDRESS + '/signup', {
             params: {
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
                 email: this.state.email,
+<<<<<<< HEAD
                 country:this.state.country,
                 permissions:this.state.permissions,
                 messages:this.state.messages,
@@ -49,66 +50,59 @@ export default class SignUp extends Component{
                 numOfGames:this.state.numOfGames,
                 numOfVictoryGames:this.state.numOfVictoryGames
             }});
+=======
+                country: this.state.country,
+                permissions: this.state.permissions
+            }
+        });
+>>>>>>> 612e32b... fixed view flow
         console.log(response.data);
-        setTimeout( () => { window.location = '/' }, 500);
+        setTimeout(() => { window.location = '/' }, 500);
 
     }
 
-    render(){
-        return(
-            <div style={this.compStyle}>
-            {/* <form onSubmit={this.handleSubmit}> */}
-            <form>
-            <label>
-            User name:
-            <input
-        name="userToRegister"
-        type="text"
-        onChange={this.handleInputChange}
-        />
-        </label>
-            <br/>
-                <label>
-                    Email:
+    onSubmit = (e) => e.preventDefault();
+
+    render() {
+        return (
+            <div className="login">
+                <h1>Signup</h1>
+                <form onSubmit={this.onSubmit}>
                     <input
+                        placeholder="User"
+                        name="userToRegister"
+                        type="text"
+                        onChange={this.handleInputChange}
+                        required
+                    />
+                    <br />
+                    <input
+                        placeholder="Password"
+                        name="passToRegister"
+                        // value={this.state.user}
+                        type="password"
+                        onChange={this.handleInputChange}
+                        required
+                    />
+                    <br />
+                    <input
+                        placeholder="Email"
                         name="email"
                         type="text"
                         onChange={this.handleInputChange}
+                        required
                     />
-                </label>
-        <br/>
-                <label>
-                    Country:
+                    <br />
                     <input
+                        placeholder="Country"
                         name="country"
                         type="text"
                         onChange={this.handleInputChange}
+                        required
                     />
-                </label>
-                <br/>
-        <label>
-        Password:
-    <input
-        name="passToRegister"
-        // value={this.state.user}
-        type="password"
-        onChange={this.handleInputChange}
-        />
-        </label>
-                {/*<label>*/}
-                {/*    permissions:*/}
-                {/*    <input*/}
-                {/*        name="permissions"*/}
-                {/*        // value={this.state.user}*/}
-                {/*        type="text"*/}
-                {/*        onChange={this.handleInputChange}*/}
-                {/*    />*/}
-                {/*</label>*/}
-
-
-        </form>
-        <button onClick={this.handleSubmit}>Sumbit</button>
-            </div>
-    )
+                    <button type='submit' className="login_btn login_btn-primary login_btn-block login_btn-large" onClick={this.handleSubmit.bind(this)}>Sumbit</button>
+                </form>
+            </div >
+        )
     }
 }
