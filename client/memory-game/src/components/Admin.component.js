@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import axios from 'axios';
 import Map from "./Map.component";
-const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "/";
+const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "";
 export default class Admin extends Component{
     constructor(props){
         super(props);

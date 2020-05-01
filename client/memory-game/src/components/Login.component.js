@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styles from './styles/login.css';
-const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "/";
+const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "";
 
 export default class Login extends Component {
 
