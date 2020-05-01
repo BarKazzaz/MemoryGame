@@ -44,6 +44,23 @@ export default class SignUp extends Component {
             [name]: value
         })
     }
+    
+    // POST request instead of GET
+    // async handleSubmit() {
+    //     params: {
+    //         user: this.state.userToRegister,
+    //         password: this.state.passToRegister,
+    //         email: this.state.email,
+    //         country: this.state.country,
+    //         permissions: this.state.permissions,
+    //         messages: this.state.messages,
+    //         rudeMessages: this.state.rudeMessages,
+    //         numOfGames: this.state.numOfGames,
+    //         numOfVictoryGames: this.state.numOfVictoryGames
+    //     }
+    //     let res = await axios.post(`${SERVER_ADDRESS}/signup`, params);
+    //     setTimeout((res) => { window.location = '/' }, 500);
+    // }
 
     async handleSubmit() {
         if (!(this.state.userToRegister && this.state.email && this.state.passToRegister && this.state.confpassToRegister))
