@@ -38,7 +38,7 @@ export default class Game extends Component {
     componentDidMount() {
         let usr = JSON.parse(localStorage.getItem('user'));
         if (usr)
-            this.state.socket.emit("quickPlay", {name: usr.name});
+            this.state.socket.emit("quickPlay", { name: usr.name });
         this.state.socket.on("didJoin", (data) => {
             let cards = data.board;
             let cardElms = [];
@@ -54,6 +54,11 @@ export default class Game extends Component {
             this.setState({ room: data.room, cardElms: cardElms, myPlayerId: data.id, gameState: "connected" })
         });
         this.state.socket.on("lets start", (data) => {
+            if (data.startingPlayer !== this.state.myPlayerId) {
+                // if i am the second player to join
+                data.players = data.players.map((e, i) => data.players[(i + 1) % 2]);
+                this.setState({ currentPlayerIndex: 1 });
+            }
             this.setState({ currentPlayer: data.startingPlayer, players: data.players, gameState: "starting" })
         });
         this.state.socket.on("endTurn", () => this.endTurn());
@@ -143,12 +148,12 @@ export default class Game extends Component {
     }
 
     sendMsgToChat(msg) {
-        this.state.socket.emit('chatMsg', { 'room':this.state.room, 'message': {'from': this.state.myPlayerId, 'content': msg} })
+        this.state.socket.emit('chatMsg', { 'room': this.state.room, 'message': { 'from': this.state.myPlayerId, 'content': msg } })
     }
     receiveChatMessage(msg) {
         if (msg.from === this.state.myPlayerId)
             msg.from = 'me';
-        this.setState({chatMessage: msg});
+        this.setState({ chatMessage: msg });
     }
 
     render() {
