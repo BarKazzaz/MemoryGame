@@ -39,6 +39,7 @@ export default class Home extends Component {
               <Route exact path="/">
                 <nav>
                   <Link className="btn" id="game_btn" to="/game">Play Game</Link>
+                  <Link className="btn" id="game_btn" to="/map">About us</Link>
                   <a className="btn" href='/' onClick={(e) => { localStorage.removeItem('user') }}>Logout</a>
                 </nav>
                 <p dir="ltr" style={{ position: 'absolute', bottom: '30px', left: '600px' }} >  <iframe src="https://www.facebook.com/plugins/page.php?href=https://www.facebook.com/Memory-Game-102062231427241&tabs&width=500&height=70&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="450" height="80" style={{ border: 'none', overflow: 'hidden' }} scrolling="no" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe></p>
