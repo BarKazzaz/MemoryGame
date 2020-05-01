@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://bar123:bar123@memorygamecluster-rae0j.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 function initConnection() {
     try {
@@ -15,7 +15,7 @@ function initConnection() {
 function printBar() {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     // perform actions on the collection object
-    collection.find({"name": "Bar"}).toArray((err, res) => {
+    collection.find({ "name": "Bar" }).toArray((err, res) => {
         if (err) console.error(err);
         else console.log(res);
     });
@@ -33,7 +33,7 @@ function showDetaels() {
 
 
 async function isBannedFunction(name) {
-    const query = {"name": name};
+    const query = { "name": name };
     const collection = client.db("Legends-Memory-Game").collection("Users");
     var userFound = await collection.findOne(query);
     console.log(userFound);
@@ -44,7 +44,7 @@ async function isBannedFunction(name) {
 async function findUserByCountry(country) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     return new Promise((resolve, reject) => {
-        collection.find({"country": country}).toArray((err, res) => {
+        collection.find({ "country": country }).toArray((err, res) => {
             if (err) reject(res);
             else resolve(res);
         });
@@ -60,14 +60,13 @@ async function update(query, newValues, callback) {
 
 
     const foundUser = await findUserByName(user);
-    //   console.log(foundUser);
+    // console.log(foundUser);
     if (foundUser != null) {
         let answer = await collection.updateOne(
-            {"name": foundUser.name},
-            {$set: {"email": email, "password": password}}
+            { "name": foundUser.name },
+            { $set: { "email": email, "password": password } }
         )
-
-//        console.log(answer);
+        // console.log(answer);
     } else {
         console.log("not found");
     }
@@ -79,12 +78,12 @@ async function remove(query, callback) {
     console.log(query.country);
     const country = query.country;
     return new Promise((resolve, reject) => {
-        collection.deleteOne({"country": country})
+        collection.deleteOne({ "country": country })
     });
 }
 
 
-async function insertUser(userName, passwordName, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames, isBanned,lat,lng) {
+async function insertUser(userName, passwordName, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames, isBanned, lat, lng) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     console.log(userName);
 
@@ -101,26 +100,23 @@ async function insertUser(userName, passwordName, email, country, Permissions, m
             numOfGames: numOfGames,
             numOfVictoryGames: numOfVictoryGames,
             isBanned: isBanned,
-            lng:lng,
-            lat:lat
+            lng: lng,
+            lat: lat
         });
-
     } catch (e) {
-        print(e);
-    }
-    ;
-
+        console.log(e);
+    };
 }
 
 async function findUserByName(userName) {
-    const query = {"name": userName};
+    const query = { "name": userName };
     const collection = client.db("Legends-Memory-Game").collection("Users");
     var userFound = await collection.findOne(query);
     return userFound;
 }
 
 async function findUserByNameAndPassword(userName, password) {
-    const query = {"name": userName, "password": password};
+    const query = { "name": userName, "password": password };
     const collection = client.db("Legends-Memory-Game").collection("Users");
     var userFound = await collection.findOne(query);
     console.log(userFound);
@@ -128,7 +124,7 @@ async function findUserByNameAndPassword(userName, password) {
 }
 
 async function findUserByNameAndCountry(userName, country) {
-    const query = {"name": userName, "country": country};
+    const query = { "name": userName, "country": country };
     const collection = client.db("Legends-Memory-Game").collection("Users");
     var userFound = await collection.findOne(query);
     // console.log(userFound);

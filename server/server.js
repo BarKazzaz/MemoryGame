@@ -35,16 +35,15 @@ app.get("/signup", (req, res)=>{
     let passwordname = req.query.password;
     let email = req.query.email;
     let country = req.query.country;
+    let lat = req.query.lat;
+    let lng = req.query.lng;
     let Permissions = req.query.permissions;
+    let numOfGames = 0;
     let messages = 0;
     let rudeMessages = [''];
-    let numOfGames = req.query.numOfGames;
-    let numOfVictoryGames = req.query.numOfVictoryGames;
+    let numOfVictoryGames = 0;
     let isBanned = false;
-    let lat = 0.0;
-        let lng = 0.0;
-
-    Model.insertUser(userName, passwordname, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames,isBanned,lat,lng);
+    Model.insertUser(userName, passwordname, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames, isBanned, lat, lng);
     res.json({type:'OK', content: 'done'});
 });
 
