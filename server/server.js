@@ -35,21 +35,14 @@ app.get("/signup", (req, res)=>{
     let passwordname = req.query.password;
     let email = req.query.email;
     let country = req.query.country;
-<<<<<<< HEAD
-    let Permissions = req.query.Permissions;
+    let Permissions = req.query.permissions;
     let messages = 0;
     let rudeMessages = [''];
     let numOfGames = req.query.numOfGames;
     let numOfVictoryGames = req.query.numOfVictoryGames;
 
-    Model.insertUser(userName, passwordname,email,country,Permissions,messages,rudeMessages,numOfGames,numOfVictoryGames);
-
-    res.json(users);
-=======
-    let permissions = req.query.permissions;
-    Model.insertUser(userName, passwordname, email, country, permissions);
+    Model.insertUser(userName, passwordname, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames);
     res.json({type:'OK', content: 'done'});
->>>>>>> 612e32b... fixed view flow
 });
 
 

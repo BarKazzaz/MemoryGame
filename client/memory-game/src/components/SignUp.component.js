@@ -42,7 +42,6 @@ export default class SignUp extends Component {
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
                 email: this.state.email,
-<<<<<<< HEAD
                 country:this.state.country,
                 permissions:this.state.permissions,
                 messages:this.state.messages,
@@ -50,12 +49,6 @@ export default class SignUp extends Component {
                 numOfGames:this.state.numOfGames,
                 numOfVictoryGames:this.state.numOfVictoryGames
             }});
-=======
-                country: this.state.country,
-                permissions: this.state.permissions
-            }
-        });
->>>>>>> 612e32b... fixed view flow
         console.log(response.data);
         setTimeout(() => { window.location = '/' }, 500);
 
