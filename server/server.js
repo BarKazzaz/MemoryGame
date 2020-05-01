@@ -36,9 +36,13 @@ app.get("/bar", (req, res)=>{
     let passwordname = req.query.password;
     let email = req.query.email;
     let country = req.query.country;
-    let permissions = req.query.permissions;
+    let Permissions = req.query.Permissions;
+    let messages = 0;
+    let rudeMessages = [''];
+    let numOfGames = req.query.numOfGames;
+    let numOfVictoryGames = req.query.numOfVictoryGames;
 
-    Model.insertUser(userName, passwordname,email,country,permissions);
+    Model.insertUser(userName, passwordname,email,country,Permissions,messages,rudeMessages,numOfGames,numOfVictoryGames);
 
     res.json(users);
 });

@@ -12,7 +12,11 @@ export default class SignUp extends Component{
             confpassToRegister: "",
             email: "",
             country: "",
-            permissions: "user"
+            Permissions: "user",
+            messages:0,
+            rudeMessages:[""],
+            numOfGames:"",
+            numOfVictoryGames:""
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -39,7 +43,11 @@ export default class SignUp extends Component{
                 password: this.state.passToRegister,
                 email: this.state.email,
                 country:this.state.country,
-                permissions:this.state.permissions
+                permissions:this.state.permissions,
+                messages:this.state.messages,
+                rudeMessages:this.state.rudeMessages,
+                numOfGames:this.state.numOfGames,
+                numOfVictoryGames:this.state.numOfVictoryGames
             }});
         console.log(response.data);
         setTimeout( () => { window.location = '/' }, 500);

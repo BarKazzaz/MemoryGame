@@ -79,12 +79,12 @@ async function remove(query,callback) {
 
 
 
-async function insertUser(userName, passwordName,email,country,permissions) {
+async function insertUser(userName, passwordName,email,country,Permissions,messages,rudeMessages,numOfGames,numOfVictoryGames) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     console.log(userName);
 
     try {
-        await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email, country:country,permissions:permissions });
+        await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email, country:country,Permissions:Permissions,messages:messages,rudeMessages:rudeMessages,numOfGames:numOfGames,numOfVictoryGames:numOfVictoryGames });
 
     }
     catch (e) {
