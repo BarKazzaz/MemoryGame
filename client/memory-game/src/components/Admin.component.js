@@ -1,27 +1,30 @@
-import React, { Component }  from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
 import Map from "./Map.component";
+
 const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "";
-export default class Admin extends Component{
-    constructor(props){
+export default class Admin extends Component {
+    constructor(props) {
         super(props);
         this.state = {
-            user : "",
-            password : "",
-            email : "",
-            search : "",
+            user: "",
+            password: "",
+            email: "",
+            search: "",
             country: "",
             status: "pending",
-            statusMsg:'Loading...',
+            statusMsg: 'Loading...',
             usersList: [],
-            searchList: []
+            searchList: [],
+            _id: ""
         };
         this.handleSubmitUpdate = this.handleSubmitUpdate.bind(this);
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
         this.handleSubmitView = this.handleSubmitView.bind(this);
         this.handleSubmitRemove = this.handleSubmitRemove.bind(this);
-        this.handleSubmitBroadSearch = this.handleSubmitBroadSearch.bind(this)
-
+        this.handleSubmitBroadSearch = this.handleSubmitBroadSearch.bind(this);
+        this.handleSubmitIsBanned = this.handleSubmitIsBanned.bind(this);
+        this.handleInputChangeIsBanned = this.handleInputChangeIsBanned.bind(this);
         this.handleInputChangeUpdate = this.handleInputChangeUpdate.bind(this);
         this.handleInputChangeRemove = this.handleInputChangeRemove.bind(this);
         this.handleInputChangeSearch = this.handleInputChangeSearch.bind(this);
@@ -34,25 +37,25 @@ export default class Admin extends Component{
 
     componentDidMount() {
         axios.get(`${SERVER_ADDRESS}/listUsers`).then((view) => {
-            if(view.data.type === 'OK'){
+            if (view.data.type === 'OK') {
                 console.log(view.data.content);
                 this.setState({usersList: view.data.content, status: 'ready'});
-            }else {
+            } else {
                 this.setState({status: 'error', statusMessage: `An error occoured:${view.data.content}`})
                 console.log(view)
             }
-            });
-        // axios.get("http://localhost:5000/search").then((search) => {
-        //     if(search.data.type === 'OK'){
-        //         console.log(search.data.content);
-        //         this.setState({usersList: search.data.content, status: 'ready'});
-        //     }else {
-        //         this.setState({status: 'error', statusMessage: `An error occoured:${search.data.content}`})
-        //         console.log(search)
-        //     }
-        //     this.setState({searchList: search.data, status: 'ready'});
-        // })
+        });
     }
+
+    handleInputChangeIsBanned(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        this.setState({
+            [name]: value
+        })
+    }
+
 
     handleInputChangeUpdate(event) {
         const target = event.target;
@@ -98,7 +101,8 @@ export default class Admin extends Component{
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
                 email: this.state.email
-            }});
+            }
+        });
         console.log(update.data);
     }
 
@@ -108,7 +112,8 @@ export default class Admin extends Component{
             params: {
                 user: this.state.userToRegister,
                 country: this.state.country
-            }});
+            }
+        });
         console.log(update.data);
     }
 
@@ -118,8 +123,9 @@ export default class Admin extends Component{
             params: {
                 country: this.state.country
                 //password: this.state.passToRegister,
-         //       email: this.state.email
-            }});
+                //       email: this.state.email
+            }
+        });
         console.log(remove.data);
     }
 
@@ -130,7 +136,8 @@ export default class Admin extends Component{
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
                 email: this.state.email
-            }})
+            }
+        })
         //   console.log(view.data);
 
     }
@@ -146,7 +153,7 @@ export default class Admin extends Component{
 
     renderTableData() {
         return this.state.usersList.map((user, index) => {
-            const { name, password, score, email, country, rudeMessages, Permissions,numOfGames,numOfVictoryGames } = user //destructuring
+            const {name, password, score, email, country, rudeMessages, Permissions, numOfGames, numOfVictoryGames} = user //destructuring
             return (
 
                 <tr key={name}>
@@ -185,17 +192,28 @@ export default class Admin extends Component{
     // }
 
     async handleSubmitSearch() {
-
         const search = await axios.get(`${SERVER_ADDRESS}/search`, {
             params: {
                 country: this.state.country
-            }});
+            }
+        });
+        this.setState({usersList: search.data.content});
+    }
+
+    async handleSubmitIsBanned() {
+
+        const search = await axios.get(`${SERVER_ADDRESS}/isBanned`, {
+            params: {
+                name: this.state.name
+            }
+        });
         console.log(search.data);
     }
 
-    render(){
-        if(this.state.status !== 'ready') return (<p>{this.state.statusMessage}</p>)
-        return(
+
+    render() {
+        if (this.state.status !== 'ready') return (<p>{this.state.statusMessage}</p>)
+        return (
             <div style={this.compStyle}>
                 {/* <form onSubmit={this.handleSubmit}> */}
                 <table id='usersList'>
@@ -212,6 +230,10 @@ export default class Admin extends Component{
                 {/*    </tbody>*/}
                 {/*</table>*/}
                 <br/>
+                <a className="btn" href='/' onClick={(e) => {
+                    localStorage.removeItem('user')
+                }}>Logout</a>
+
                 <form>
                     <label>
                         User name:
@@ -242,48 +264,47 @@ export default class Admin extends Component{
                     </label>
                 </form>
                 <button onClick={this.handleSubmitUpdate}>Update Sumbit</button>
-
-
-
-
-
-
-<br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <label>
+                    isBanned:
+                    <input
+                        name="name"
+                        // value={this.state.user}
+                        type="text"
+                        onChange={this.handleInputChangeIsBanned}
+                    />
+                </label>
+                <button onClick={this.handleSubmitIsBanned}>IsBanned Sumbit</button>
+                <br/>
                 <br/>
                 <br/>
                 <br/>
                 <br/>
 
                 <label>
-
-                User name:
-                <input
-                    name="userToRegister"
-                    type="text"
-                    onChange={this.handleInputBroadSearch}
-                />
-            </label>
-            <br/>
-            <label>
-            country:
-            <input
-            name="country"
-            type="text"
-            onChange={this.handleInputBroadSearch}
-        />
-        </label>
-        <br/>
+                    User name:
+                    <input
+                        name="userToRegister"
+                        type="text"
+                        onChange={this.handleInputBroadSearch}
+                    />
+                </label>
+                <br/>
+                <label>
+                    country:
+                    <input
+                        name="country"
+                        type="text"
+                        onChange={this.handleInputBroadSearch}
+                    />
+                </label>
+                <br/>
                 <button onClick={this.handleSubmitBroadSearch}>BroadSearch Sumbit</button>
 
 
-
-
-
-
-
-
-
-
                 <br/>
                 <br/>
                 <br/>
@@ -293,12 +314,6 @@ export default class Admin extends Component{
                 <br/>
                 <br/>
                 <br/>
-
-
-
-
-
-
 
 
                 <br/>

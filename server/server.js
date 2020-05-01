@@ -40,8 +40,11 @@ app.get("/signup", (req, res)=>{
     let rudeMessages = [''];
     let numOfGames = req.query.numOfGames;
     let numOfVictoryGames = req.query.numOfVictoryGames;
+    let isBanned = false;
+    let lat = 0.0;
+        let lng = 0.0;
 
-    Model.insertUser(userName, passwordname, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames);
+    Model.insertUser(userName, passwordname, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames,isBanned,lat,lng);
     res.json({type:'OK', content: 'done'});
 });
 
@@ -76,9 +79,13 @@ app.get("/remove", (req, _res) => {
 app.get("/search",(req,res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     const country = req.query.country;
-    const userFound = Model.findUserByCountry(country);
-    console.log(userFound);
-    res.end('usersDet');
+    const userFound = Model.findUserByCountry(country).then((data)=>{
+        msg = {'type': 'OK', 'content': data}
+        res.json(msg)
+    }).catch(err => {
+        msg = {'type':'ERROR','content': err};
+        res.json(msg)
+    });
 
 });
 
@@ -94,6 +101,24 @@ app.get("/listUsers",(req,res)=>{
     })
 });
 
+app.get("/isBanned",(req,res)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let msg;
+    let name = req.name;
+    console.log(name)
+
+    Model.findUserByName(name).then(userFound => {
+        console.log(userFound);
+        if (userFound) {
+            userFound = {'isBanned': userFound.isBanned}
+            msg = {'type': 'OK', 'content': userFound}
+            res.json(msg)
+        } else {
+            msg = {'type': 'ERROR', 'content': {'permissions': 'Not Found'}};
+            res.json(msg)
+        }
+    })
+});
 app.get("/login", (req, res)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     let userName = req.query.user;

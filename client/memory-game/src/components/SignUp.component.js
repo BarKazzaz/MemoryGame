@@ -17,7 +17,9 @@ export default class SignUp extends Component {
             rudeMessages:[""],
             numOfGames:"",
             numOfVictoryGames:"",
-            isBanned:false
+            isBanned:false,
+            lat:0.0,
+            lng:0.0
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -49,7 +51,11 @@ export default class SignUp extends Component {
                 rudeMessages: this.state.rudeMessages,
                 numOfGames: this.state.numOfGames,
                 numOfVictoryGames: this.state.numOfVictoryGames,
-                isBanned: this.state.isBanned
+                isBanned: this.state.isBanned,
+                lat: this.state.lat,
+                lng: this.state.lng
+
+
             }});
         console.log(response.data);
         setTimeout(() => { window.location = '/' }, 500);
