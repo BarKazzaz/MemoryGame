@@ -27,11 +27,11 @@ export default class Login extends Component {
                 password: this.state.pass
             }
         });
-        console.log(response.data);
+        console.log(response);
         // if user not found OR server login error
         if (response.data.type === 'ERROR') return this.setState({ status: 'error' });
         // user found
-        else {
+        else if (response.data.type === 'OK'){
             console.log(response.data.content);
             localStorage.setItem('user', JSON.stringify(response.data.content));
             if (response.data.content.permissions === 'admin') {
