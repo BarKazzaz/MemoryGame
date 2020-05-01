@@ -79,12 +79,12 @@ async function remove(query,callback) {
 
 
 
-async function insertUser(userName, passwordName,email,country,Permissions,messages,rudeMessages,numOfGames,numOfVictoryGames) {
+async function insertUser(userName, passwordName,email,country,Permissions,messages,rudeMessages,numOfGames,numOfVictoryGames,isBanned) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     console.log(userName);
 
     try {
-        await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email, country:country,Permissions:Permissions,messages:messages,rudeMessages:rudeMessages,numOfGames:numOfGames,numOfVictoryGames:numOfVictoryGames });
+        await collection.insertOne({ name:  userName,password: passwordName, score: 0, email: email, country:country,Permissions:Permissions,messages:messages,rudeMessages:rudeMessages,numOfGames:numOfGames,numOfVictoryGames:numOfVictoryGames,isBanned:isBanned });
 
     }
     catch (e) {
@@ -108,5 +108,12 @@ async function findUserByNameAndPassword(userName, password) {
     return userFound;
 }
 
+async function findUserByNameAndCountry(userName, country) {
+    const query = { "name": userName, "country" : country};
+    const collection = client.db("Legends-Memory-Game").collection("Users");
+    var userFound = await collection.findOne(query);
+   // console.log(userFound);
+    return userFound;
+}
 
-module.exports = { showDetaels:showDetaels,findUserByName:findUserByName, insertUser: insertUser, printBar : printBar, remove:remove,findUserByNameAndPassword:findUserByNameAndPassword, update : update, findUserByCountry:findUserByCountry,initConnection : initConnection};
+module.exports = { showDetaels:showDetaels,findUserByName:findUserByName,findUserByNameAndCountry:findUserByNameAndCountry, insertUser: insertUser, printBar : printBar, remove:remove,findUserByNameAndPassword:findUserByNameAndPassword, update : update, findUserByCountry:findUserByCountry,initConnection : initConnection};

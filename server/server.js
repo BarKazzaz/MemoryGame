@@ -114,6 +114,24 @@ app.get("/login", (req, res)=>{
 });
 
 
+app.get("/BroadSearch", (req, res)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    let userName = req.query.user;
+    let country = req.query.country;
+    let msg;
+    Model.findUserByNameAndCountry(userName, country).then(userFound => {
+        console.log(userFound);
+        if(userFound){
+            userFound = {'name': userFound.name, 'country': userFound.country}
+            msg = {'type': 'OK', 'content': userFound}
+            res.json(msg)
+        }
+        else{
+            msg = {'type':'ERROR','content': {'permissions': 'Not Found'}};
+            res.json(msg)
+        }
+    } );
+});
 
 server.listen(port, (err) => {
     if (err) console.error(err);

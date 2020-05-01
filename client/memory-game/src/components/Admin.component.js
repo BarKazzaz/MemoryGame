@@ -20,10 +20,13 @@ export default class Admin extends Component{
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
         this.handleSubmitView = this.handleSubmitView.bind(this);
         this.handleSubmitRemove = this.handleSubmitRemove.bind(this);
+        this.handleSubmitBroadSearch = this.handleSubmitBroadSearch.bind(this)
 
         this.handleInputChangeUpdate = this.handleInputChangeUpdate.bind(this);
         this.handleInputChangeRemove = this.handleInputChangeRemove.bind(this);
         this.handleInputChangeSearch = this.handleInputChangeSearch.bind(this);
+        this.handleSubmitBroadSearch = this.handleSubmitBroadSearch.bind(this);
+        this.handleInputBroadSearch = this.handleInputBroadSearch.bind(this);
         this.renderTableData = this.renderTableData.bind(this);
         this.renderTableHeader = this.renderTableHeader.bind(this);
 //        this.renderTableDataSearch = this.renderTableDataSearch.bind(this);
@@ -60,6 +63,15 @@ export default class Admin extends Component{
         })
     }
 
+    handleInputBroadSearch(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        this.setState({
+            [name]: value
+        })
+    }
+
     handleInputChangeRemove(event) {
         const target = event.target;
         const name = target.name;
@@ -86,6 +98,16 @@ export default class Admin extends Component{
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
                 email: this.state.email
+            }});
+        console.log(update.data);
+    }
+
+    async handleSubmitBroadSearch() {
+        console.log(this.state);
+        const update = await axios.get(`${SERVER_ADDRESS}/BroadSearch`, {
+            params: {
+                user: this.state.userToRegister,
+                country: this.state.country
             }});
         console.log(update.data);
     }
@@ -218,11 +240,50 @@ export default class Admin extends Component{
                             onChange={this.handleInputChangeUpdate}
                         />
                     </label>
-
-
-
                 </form>
                 <button onClick={this.handleSubmitUpdate}>Update Sumbit</button>
+
+
+
+
+
+
+<br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+                <label>
+
+                User name:
+                <input
+                    name="userToRegister"
+                    type="text"
+                    onChange={this.handleInputBroadSearch}
+                />
+            </label>
+            <br/>
+            <label>
+            country:
+            <input
+            name="country"
+            type="text"
+            onChange={this.handleInputBroadSearch}
+        />
+        </label>
+        <br/>
+                <button onClick={this.handleSubmitBroadSearch}>BroadSearch Sumbit</button>
+
+
+
+
+
+
+
+
+
+
                 <br/>
                 <br/>
                 <br/>
