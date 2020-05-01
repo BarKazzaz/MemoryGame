@@ -37,7 +37,7 @@ export default class SignUp extends Component {
 
     async handleSubmit() {
         console.log(this.state);
-        const response = await axios.get(SERVER_ADDRESS + '/signup', {
+        const response = await axios.get(`${SERVER_ADDRESS}/signup`, {
             params: {
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,

@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import axios from 'axios';
 import Map from "./Map.component";
-
+const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "/";
 export default class Admin extends Component{
     constructor(props){
         super(props);
@@ -13,11 +13,8 @@ export default class Admin extends Component{
             country: "",
             status: "pending",
             statusMsg:'Loading...',
-            // view: axios.get("http://localhost:5000/listUsers", {params: {}})
-
             usersList: [],
             searchList: []
-
         };
         this.handleSubmitUpdate = this.handleSubmitUpdate.bind(this);
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
@@ -32,8 +29,8 @@ export default class Admin extends Component{
 //        this.renderTableDataSearch = this.renderTableDataSearch.bind(this);
     }
 
-    componentDidMount(): void {
-        axios.get("http://localhost:5000/listUsers").then((view) => {
+    componentDidMount() {
+        axios.get(`${SERVER_ADDRESS}/listUsers`).then((view) => {
             if(view.data.type === 'OK'){
                 console.log(view.data.content);
                 this.setState({usersList: view.data.content, status: 'ready'});
@@ -84,7 +81,7 @@ export default class Admin extends Component{
 
     async handleSubmitUpdate() {
         console.log(this.state);
-        const update = await axios.get("http://localhost:5000/update", {
+        const update = await axios.get(`${SERVER_ADDRESS}/update`, {
             params: {
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
@@ -95,7 +92,7 @@ export default class Admin extends Component{
 
     async handleSubmitRemove() {
 //        console.log(this.state);
-        const remove = await axios.get("http://localhost:5000/remove", {
+        const remove = await axios.get(`${SERVER_ADDRESS}/remove`, {
             params: {
                 country: this.state.country
                 //password: this.state.passToRegister,
@@ -106,7 +103,7 @@ export default class Admin extends Component{
 
     async handleSubmitView() {
 
-        const view = await axios.get("http://localhost:5000/listUsers", {
+        const view = await axios.get(`${SERVER_ADDRESS}/listUsers`, {
             params: {
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
@@ -167,7 +164,7 @@ export default class Admin extends Component{
 
     async handleSubmitSearch() {
 
-        const search = await axios.get("http://localhost:5000/search", {
+        const search = await axios.get(`${SERVER_ADDRESS}/search`, {
             params: {
                 country: this.state.country
             }});
