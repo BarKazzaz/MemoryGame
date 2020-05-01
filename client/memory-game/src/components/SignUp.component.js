@@ -12,7 +12,7 @@ export default class SignUp extends Component {
             confpassToRegister: "",
             email: "",
             country: "",
-            Permissions: "user",
+            permissions: "user",
             messages:0,
             rudeMessages:[""],
             numOfGames:"",
@@ -42,12 +42,12 @@ export default class SignUp extends Component {
                 user: this.state.userToRegister,
                 password: this.state.passToRegister,
                 email: this.state.email,
-                country:this.state.country,
-                permissions:this.state.permissions,
-                messages:this.state.messages,
-                rudeMessages:this.state.rudeMessages,
-                numOfGames:this.state.numOfGames,
-                numOfVictoryGames:this.state.numOfVictoryGames
+                country: this.state.country,
+                permissions: this.state.permissions,
+                messages: this.state.messages,
+                rudeMessages: this.state.rudeMessages,
+                numOfGames: this.state.numOfGames,
+                numOfVictoryGames: this.state.numOfVictoryGames
             }});
         console.log(response.data);
         setTimeout(() => { window.location = '/' }, 500);
