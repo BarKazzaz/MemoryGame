@@ -36,7 +36,9 @@ export default class Game extends Component {
     }
 
     componentDidMount() {
-        this.state.socket.emit("quickPlay");
+        let usr = JSON.parse(localStorage.getItem('user'));
+        if (usr)
+            this.state.socket.emit("quickPlay", {name: usr.name});
         this.state.socket.on("didJoin", (data) => {
             let cards = data.board;
             let cardElms = [];
