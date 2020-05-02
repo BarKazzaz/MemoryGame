@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import './styles/marker.css'
 
-const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "";
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const Marker = (props) => {
@@ -19,7 +18,7 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            countries: [],
+            countries: props.countries,
             status: 'pending'
         }
         this.renderMarkers = this.renderMarkers.bind(this);
@@ -32,14 +31,21 @@ class Map extends Component {
         zoom: 2
     };
 
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.countries !== this.props.countries) {
+            console.log("updating", this.props.countries)
+            this.setState({ countries: this.props.countries })
+        }
+    }
+
     componentDidMount() {
         // TODO: request all countries lat and lng
-        fetch(`${SERVER_ADDRESS}/api/getAllCountries`)
-            .then(res => res.json())
-            .then(data => { console.log(data); return data })
-            .then(data => this.setState({ status: 'ready', countries: data.content }))
-            .then(() => { console.log(this.state.countries) })
-            .catch(err => { console.log(err) });
+        // fetch(`${SERVER_ADDRESS}/api/getAllCountries`)
+        //     .then(res => res.json())
+        //     .then(data => { console.log(data); return new Promise((resolve, reject)=> resolve(data)) })
+        //     .then(data => this.setState({ status: 'ready', countries: data.content }))
+        //     .then(() => { console.log(this.state.countries) })
+        //     .catch(err => { console.log(err) });
     }
 
     renderMarkers() {
@@ -70,8 +76,9 @@ class Map extends Component {
                 </div>
 
             );
-        else if (this.state.status === 'pending'){
-            return(
+        else if (this.state.status === 'pending') {
+            if (this.state.countries) this.setState({ status: 'ready' })
+            return (
                 <div style={{ backgroundColor: 'grey', marginLeft: '25%', height: '50%', width: '50%' }}>
                     <p>Loading...</p>
                 </div>
