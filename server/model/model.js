@@ -162,6 +162,37 @@ function addToRudeMessages(id, message) {
     })
 }
 
+
+function addToVictoryGames(id) {
+    return new Promise((resolve, reject) => {
+        let o_id = new mongo.ObjectID(id);
+        getUserById(id)
+            .then((data) => {
+                const query = { "_id": o_id };
+                const collection = client.db("Legends-Memory-Game").collection("Users");
+                collection.updateOne(query, {$set: {numOfVictoryGames: data.numOfVictoryGames+1}})
+                    .then(data=>resolve(data))
+                    .catch(err => reject(err))
+            }).catch(err => reject(err));
+    })
+}
+
+
+function addToGames(id) {
+    return new Promise((resolve, reject) => {
+        let o_id = new mongo.ObjectID(id);
+        getUserById(id)
+            .then((data) => {
+                const query = { "_id": o_id };
+                const collection = client.db("Legends-Memory-Game").collection("Users");
+                collection.updateOne(query, {$set: {numOfGames: data.numOfGames+1}})
+                    .then(data=>resolve(data))
+                    .catch(err => reject(err))
+            }).catch(err => reject(err));
+    })
+}
+
+
 module.exports = {
     showDetaels: showDetaels,
     findUserByName: findUserByName,
@@ -175,5 +206,6 @@ module.exports = {
     initConnection: initConnection,
     isBannedFunction: isBannedFunction,
     getUserById: getUserById,
-    addToRudeMessages: addToRudeMessages
+    addToRudeMessages: addToRudeMessages,
+    addToVictoryGames:addToVictoryGames
 };

@@ -40,7 +40,7 @@ const Slice = props => {
     .innerRadius(0)
     .outerRadius(100);
 
-  let interpolate = d3.interpolateRgb("#eaaf79", "#bc3358");
+  let interpolate = d3.interpolateRgb("#1f2dea", "#2dbc10");
 
   return pie.map((slice, index) => {
     let sliceColor = interpolate(index / (pie.length - 1));

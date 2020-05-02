@@ -24,17 +24,25 @@ export default class Home extends Component {
 
   componentDidMount() {
     let usr = JSON.parse(localStorage.getItem('user'));
-    if (usr)
-      this.setState({ perm: usr.Permissions })
-    fetch(`${SERVER_ADDRESS}/api/getUserById?id=${usr.id}`, {
-      params: {
-
-      }
-    })
-      .then(res => res.json())
-      .then(data => { console.log(data); return new Promise((resolve, reject) => resolve(data)) })
-      .then(data => this.setState({ status: 'ready', games: data.content.numOfGames, victories: data.content.numOfVictoryGames }))
-      .catch(err => { console.log(err) });
+    if (usr) {
+      this.setState({perm: usr.Permissions})
+      fetch(`${SERVER_ADDRESS}/api/getUserById?id=${usr.id}`, {
+        params: {}
+      })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            return new Promise((resolve, reject) => resolve(data))
+          })
+          .then(data => this.setState({
+            status: 'ready',
+            games: data.content.numOfGames,
+            victories: data.content.numOfVictoryGames
+          }))
+          .catch(err => {
+            console.log(err)
+          });
+    }
   }
 
   render() {

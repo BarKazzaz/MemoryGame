@@ -174,6 +174,8 @@ export default class Admin extends Component {
             }
         });
         console.log(update.data);
+        this.setState({usersList: update.data.content});
+
     }
 
     async handleSubmitRemove() {
@@ -448,7 +450,7 @@ export default class Admin extends Component {
                 <br/>
 
 
-                <h1>Signup</h1>
+                <h1>Add users</h1>
                 <form onSubmit={this.onSubmit}>
                     <input
                         placeholder="User"
