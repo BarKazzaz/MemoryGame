@@ -14,7 +14,7 @@ export default class SignUp extends Component {
             lat: 0.0,
             lng: 0.0,
             confpassToRegister: "",
-            permissions: "user",
+            Permissions: "user",
             status: 'loading'
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -52,7 +52,7 @@ export default class SignUp extends Component {
     //         password: this.state.passToRegister,
     //         email: this.state.email,
     //         country: this.state.country,
-    //         permissions: this.state.permissions,
+    //         Permissions: this.state.Permissions,
     //         messages: this.state.messages,
     //         rudeMessages: this.state.rudeMessages,
     //         numOfGames: this.state.numOfGames,
@@ -75,7 +75,7 @@ export default class SignUp extends Component {
                 country: this.state.country,
                 lat: this.state.lat,
                 lng: this.state.lng,
-                permissions: this.state.permissions
+                Permissions: this.state.Permissions
             }
         });
         console.log(response.data);

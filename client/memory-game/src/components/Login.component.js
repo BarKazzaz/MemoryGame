@@ -34,9 +34,9 @@ export default class Login extends Component {
         else if (response.data.type === 'OK'){
             console.log(response.data.content);
             localStorage.setItem('user', JSON.stringify(response.data.content));
-            if (response.data.content.permissions === 'admin') {
+            if (response.data.content.Permissions === 'admin') {
                 setTimeout(() => { window.location = '/' }, 500);
-            } else if (response.data.content.permissions === 'user') {
+            } else if (response.data.content.Permissions === 'user') {
                 setTimeout(() => {
                     window.location = '/'
                 }, 500);

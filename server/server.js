@@ -39,7 +39,7 @@ app.get("/signup", (req, res)=>{
     let country = req.query.country;
     let lat = req.query.lat;
     let lng = req.query.lng;
-    let Permissions = req.query.permissions;
+    let Permissions = req.query.Permissions;
     let numOfGames = 0;
     let messages = 0;
     let rudeMessages = [''];
@@ -115,7 +115,7 @@ app.get("/isBanned",(req,res)=>{
             msg = {'type': 'OK', 'content': userFound}
             res.json(msg)
         } else {
-            msg = {'type': 'ERROR', 'content': {'permissions': 'Not Found'}};
+            msg = {'type': 'ERROR', 'content': {'Permissions': 'Not Found'}};
             res.json(msg)
         }
     })
@@ -128,12 +128,12 @@ app.get("/login", (req, res)=>{
     Model.findUserByNameAndPassword(userName, passwordname).then(userFound => {
         console.log(userFound);
         if(userFound){
-            userFound = {'name': userFound.name, 'country': userFound.country, 'permissions': userFound.Permissions}
+            delete(userFound.password)
             msg = {'type': 'OK', 'content': userFound}
             res.json(msg)
         }
         else{
-            msg = {'type':'ERROR','content': {'permissions': 'guest'}};
+            msg = {'type':'ERROR','content': {'Permissions': 'guest'}};
             res.json(msg)
         }
     } );
@@ -153,7 +153,7 @@ app.get("/BroadSearch", (req, res)=>{
             res.json(msg)
         }
         else{
-            msg = {'type':'ERROR','content': {'permissions': 'Not Found'}};
+            msg = {'type':'ERROR','content': {'Permissions': 'Not Found'}};
             res.json(msg)
         }
     } );
