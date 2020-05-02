@@ -3,7 +3,10 @@ const app = express();
 const server = require("http").Server(app);
 const socketIo = require("socket.io")(server);
 const path = require("path");
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const routes = require(path.join(__dirname, "routes", "index.js"));
+
 const port = process.env.PORT || 5000;
 const setListeners = require(path.join(__dirname, "ServerHelpers")).setListeners
 const Model = require(path.join(__dirname, "model/model.js"));
@@ -12,11 +15,10 @@ socketIo.on("connection", socket => {
     setListeners(socketIo, socket);
 });
 
-var cors = require('cors');
-
 // use it before all route definitions
 app.use(cors({origin: `http://localhost:${port}`}));
 app.use(cors())
+app.use('/api', routes.api);
 app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === "production"){// if heroku is running
