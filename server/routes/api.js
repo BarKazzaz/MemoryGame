@@ -15,4 +15,20 @@ router.get('/getAllCountries', (req, res, next) => {
         .catch(err => console.log(err))
 });
 
+router.get('/getUserById', (req, res, next) => {
+    Model.getUserById(req.query.id)
+    .then(data => {
+        // filter out password before response is sent
+        delete(data.password);
+        res.json({ type: 'OK', content: data })
+    }).catch(err => res.json({ type: "ERROR", content: err}))
+})
+
+router.get('/addToRudeMessages', (req, res, next) => {
+    Model.getUserById(req.query.id, req.query.message)
+    .then(data => {
+        res.json({ type: 'OK', content: data })
+    }).catch(err => res.json({ type: "ERROR", content: err}))
+})
+
 module.exports = router;

@@ -1,4 +1,5 @@
-const MongoClient = require('mongodb').MongoClient;
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
 const uri = "mongodb+srv://bar123:bar123@memorygamecluster-rae0j.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -131,6 +132,36 @@ async function findUserByNameAndCountry(userName, country) {
     return userFound;
 }
 
+function getUserById(id) {
+    return new Promise((resolve, reject) => {
+        let o_id = new mongo.ObjectID(id);
+        const query = { "_id": o_id };
+        const collection = client.db("Legends-Memory-Game").collection("Users");
+        collection.findOne(query)
+            .then((data, err) => {
+                if (err) reject(err)
+                else resolve(data)
+            });
+    })
+}
+
+function addToRudeMessages(id, message) {
+    return new Promise((resolve, reject) => {
+        let o_id = new mongo.ObjectID(id);
+        getUserById(id)
+            .then((data) => {
+                const query = { "_id": o_id };
+                const collection = client.db("Legends-Memory-Game").collection("Users");
+                if(data.rudeMessages[0] === '') data.rudeMessages[0] = message
+                else data.rudeMessages.push(message);
+                console.log('rudes', data.rudeMessages);
+                collection.updateOne(query, {$set: {rudeMessages: data.rudeMessages}})
+                .then(data=>resolve(data))
+                .catch(err => reject(err))
+            }).catch(err => reject(err));
+    })
+}
+
 module.exports = {
     showDetaels: showDetaels,
     findUserByName: findUserByName,
@@ -142,5 +173,7 @@ module.exports = {
     update: update,
     findUserByCountry: findUserByCountry,
     initConnection: initConnection,
-    isBannedFunction: isBannedFunction
+    isBannedFunction: isBannedFunction,
+    getUserById: getUserById,
+    addToRudeMessages: addToRudeMessages
 };
