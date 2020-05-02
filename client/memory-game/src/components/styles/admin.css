@@ -1,0 +1,37 @@
+#admin_body {
+    height: 100vh;
+    width: 100vw;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(218,218,255,1) 0%, rgba(144,208,221,1) 100%);
+}
+#admin_title {
+    text-align: center;
+    font-family: arial, sans-serif;
+}
+#users {
+    text-align: center;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    border: 3px solid #ddd;
+    width: 100%;
+}
+#users td, #users th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+#users tr{
+    background-color: #dadada;
+}
+#users tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+#users tr:hover {
+    background-color: rgb(251, 230, 230);
+}
+#users th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+}

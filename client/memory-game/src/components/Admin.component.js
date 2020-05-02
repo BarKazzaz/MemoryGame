@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import Map from "./Map.component";
+import style from './styles/admin.css'
 
 const SERVER_ADDRESS = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : "";
 export default class Admin extends Component {
@@ -17,11 +18,25 @@ export default class Admin extends Component {
             usersList: [],
             searchList: [],
             _id: "",
-            rudeMassege:[]
+            rudeMassege: []
         };
+
+        this.defaultHeader = [
+            <th>_ID</th>,
+            <th>NAME</th>,
+            <th>PASSWORD</th>,
+            <th>EMAIL</th>,
+            <th>COUNTRY</th>,
+            <th>PERMMISIONS</th>,
+            <th>MESSAGES</th>,
+            <th>RUDEMESSAGES</th>,
+            <th>NUMOFGAMES</th>,
+            <th>NUMOFVICTORYGAMES</th>,
+            <th>ISBANNED</th>
+        ]
+
         this.handleSubmitUpdate = this.handleSubmitUpdate.bind(this);
         this.handleInputChangeSignup = this.handleInputChangeSignup.bind(this);
-        //   this.handleSubmitRudeMessage = this.handleSubmitRudeMessage.bind(this);
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
         this.handleSubmitView = this.handleSubmitView.bind(this);
         this.handleSubmitRemove = this.handleSubmitRemove.bind(this);
@@ -29,23 +44,21 @@ export default class Admin extends Component {
         this.handleSubmitIsBanned = this.handleSubmitIsBanned.bind(this);
         this.handleInputChangeIsBanned = this.handleInputChangeIsBanned.bind(this);
         this.handleInputChangeUpdate = this.handleInputChangeUpdate.bind(this);
-        //  this.handleInputChangeRudeMessage = this.handleInputChangeRudeMessage.bind(this);
         this.handleInputChangeRemove = this.handleInputChangeRemove.bind(this);
         this.handleInputChangeSearch = this.handleInputChangeSearch.bind(this);
         this.handleSubmitBroadSearch = this.handleSubmitBroadSearch.bind(this);
         this.handleInputBroadSearch = this.handleInputBroadSearch.bind(this);
         this.renderTableData = this.renderTableData.bind(this);
         this.renderTableHeader = this.renderTableHeader.bind(this);
-//        this.renderTableDataSearch = this.renderTableDataSearch.bind(this);
     }
 
     componentDidMount() {
         axios.get(`${SERVER_ADDRESS}/listUsers`).then((view) => {
             if (view.data.type === 'OK') {
                 console.log(view.data.content);
-                this.setState({usersList: view.data.content, status: 'ready'});
+                this.setState({ usersList: view.data.content, status: 'ready' });
             } else {
-                this.setState({status: 'error', statusMessage: `An error occoured:${view.data.content}`})
+                this.setState({ status: 'error', statusMessage: `An error occoured:${view.data.content}` })
                 console.log(view)
             }
         });
@@ -74,8 +87,6 @@ export default class Admin extends Component {
 
     }
 
-
-
     handleInputChangeSignup(event) {
         const target = event.target;
         const name = target.name;
@@ -85,7 +96,6 @@ export default class Admin extends Component {
         })
     }
 
-
     handleInputChangeIsBanned(event) {
         const target = event.target;
         const name = target.name;
@@ -94,15 +104,6 @@ export default class Admin extends Component {
             [name]: value
         })
     }
-
-    // handleInputChangeRudeMessage(event) {
-    //     const target = event.target;
-    //     const name = target.name;
-    //     const value = target.value;
-    //     this.setState({
-    //         [name]: value
-    //     })
-    // }
 
     handleInputChangeUpdate(event) {
         const target = event.target;
@@ -153,18 +154,6 @@ export default class Admin extends Component {
         console.log(update.data);
     }
 
-
-    // async handleSubmitRudeMessage() {
-    //     console.log(this.state);
-    //     const RudeMessage = await axios.get(`${SERVER_ADDRESS}/RudeMessage`, {
-    //         params: {
-    //             _id: this.state._id,
-    //             rudeMessages: this.state.rudeMessages
-    //         }
-    //     });
-    //     console.log(RudeMessage.data);
-    // }
-
     async handleSubmitBroadSearch() {
         console.log(this.state);
         const update = await axios.get(`${SERVER_ADDRESS}/BroadSearch`, {
@@ -174,17 +163,14 @@ export default class Admin extends Component {
             }
         });
         console.log(update.data);
-        this.setState({usersList: update.data.content});
+        this.setState({ usersList: update.data.content });
 
     }
 
     async handleSubmitRemove() {
-//        console.log(this.state);
         const remove = await axios.get(`${SERVER_ADDRESS}/remove`, {
             params: {
                 country: this.state.country
-                //password: this.state.passToRegister,
-                //       email: this.state.email
             }
         });
         console.log(remove.data);
@@ -199,36 +185,40 @@ export default class Admin extends Component {
                 email: this.state.email
             }
         })
-        //   console.log(view.data);
-
     }
 
 
     renderTableHeader() {
         console.log(this.state.usersList)
-        // let header = Object.keys(this.state.usersList[0])
-        // return header.map((key, index) => {
-        //     return <th key={index}>{key.toUpperCase()}</th>
-        // })
+        if (!(this.state.usersList) || !(this.state.usersList.length > 0))
+            return this.defaultHeader
+        let header = Object.keys(this.state.usersList[0])
+        return header.filter(e => e !== 'lat' && e !== 'lng' && e !== 'score')
+            .map((key, index) => {
+                return <th key={index}>{key.toUpperCase()}</th>
+            })
     }
 
     renderTableData() {
+        console.log(this.state.usersList);
         return this.state.usersList.map((user, index) => {
-            const {_id,name, password, score, email, country, rudeMessages, Permissions, numOfGames, numOfVictoryGames,messages} = user //destructuring
+            const { _id, name, password, score, email, country, rudeMessages, Permissions, numOfGames, numOfVictoryGames, messages, isBanned } = user //destructuring
+            if (rudeMessages.length > 0) rudeMessages.map(e => `${e} `);
+            console.log(isBanned);
             return (
-
-                <tr key={name}>
+                <tr key={_id}>
                     <td>{_id}</td>
                     <td>{name}</td>
-                    <td>{messages}</td>
                     <td>{password}</td>
-                    <td>{score}</td>
+                    {/* <td>{score}</td> */}
                     <td>{email}</td>
                     <td>{country}</td>
                     <td>{Permissions}</td>
+                    <td>{messages}</td>
                     <td>{rudeMessages}</td>
                     <td>{numOfGames}</td>
                     <td>{numOfVictoryGames}</td>
+                    <td>{`${isBanned}`}</td>
                 </tr>
             )
         })
@@ -241,7 +231,7 @@ export default class Admin extends Component {
                 country: this.state.country
             }
         });
-        this.setState({usersList: search.data.content});
+        this.setState({ usersList: search.data.content });
     }
 
     async handleSubmitIsBanned() {
@@ -258,12 +248,15 @@ export default class Admin extends Component {
     render() {
         if (this.state.status !== 'ready') return (<p>{this.state.statusMessage}</p>)
         return (
-            <div style={this.compStyle}>
+            <div id="admin_body">
+                <a className="btn" href='/' onClick={(e) => {
+                    localStorage.removeItem('user')
+                }}>Logout</a>
                 {/* <form onSubmit={this.handleSubmit}> */}
-                <table id='usersList'>
+                <table id='users'>
                     <tbody>
-                    <tr>{this.renderTableHeader()}</tr>
-                    {this.renderTableData()}
+                        <tr>{this.renderTableHeader()}</tr>
+                        {this.renderTableData()}
                     </tbody>
                 </table>
                 {/*<br/>*/}
@@ -273,10 +266,7 @@ export default class Admin extends Component {
                 {/*    {this.renderTableDataSearch()}*/}
                 {/*    </tbody>*/}
                 {/*</table>*/}
-                <br/>
-                <a className="btn" href='/' onClick={(e) => {
-                    localStorage.removeItem('user')
-                }}>Logout</a>
+                <br />
 
                 {/*<form>*/}
                 {/*    <label>*/}
@@ -299,15 +289,6 @@ export default class Admin extends Component {
                 {/*    <br/>*/}
                 {/*</form>*/}
                 {/*<button onClick={this.handleSubmitRudeMessage}>RudeMessage Sumbit</button>*/}
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-
 
                 <form>
                     <label>
@@ -318,7 +299,7 @@ export default class Admin extends Component {
                             onChange={this.handleInputChangeUpdate}
                         />
                     </label>
-                    <br/>
+                    <br />
                     <label>
                         Email:
                         <input
@@ -327,7 +308,7 @@ export default class Admin extends Component {
                             onChange={this.handleInputChangeUpdate}
                         />
                     </label>
-                    <br/>
+                    <br />
                     <label>
                         Password:
                         <input
@@ -339,10 +320,6 @@ export default class Admin extends Component {
                     </label>
                 </form>
                 <button onClick={this.handleSubmitUpdate}>Update Sumbit</button>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
                 <label>
                     isBanned:
                     <input
@@ -353,12 +330,6 @@ export default class Admin extends Component {
                     />
                 </label>
                 <button onClick={this.handleSubmitIsBanned}>IsBanned Sumbit</button>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-
                 <label>
                     User name:
                     <input
@@ -367,7 +338,6 @@ export default class Admin extends Component {
                         onChange={this.handleInputBroadSearch}
                     />
                 </label>
-                <br/>
                 <label>
                     country:
                     <input
@@ -376,22 +346,7 @@ export default class Admin extends Component {
                         onChange={this.handleInputBroadSearch}
                     />
                 </label>
-                <br/>
                 <button onClick={this.handleSubmitBroadSearch}>BroadSearch Sumbit</button>
-
-
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-
-
-                <br/>
                 <form>
                     <label>
                         User name:
@@ -401,34 +356,9 @@ export default class Admin extends Component {
                             onChange={this.handleInputChangeRemove}
                         />
                     </label>
-                    <br/>
-                    {/*<label>*/}
-                    {/*    Email:*/}
-                    {/*    <input*/}
-                    {/*        name="email"*/}
-                    {/*        type="text"*/}
-                    {/*        onChange={this.handleInputChangeRemove}*/}
-                    {/*    />*/}
-                    {/*</label>*/}
-                    {/*<br/>*/}
-                    {/*<label>*/}
-                    {/*    Password:*/}
-                    {/*    <input*/}
-                    {/*        name="passToRegister"*/}
-                    {/*        // value={this.state.user}*/}
-                    {/*        type="password"*/}
-                    {/*        onChange={this.handleInputChangeRemove}*/}
-                    {/*    />*/}
-                    {/*</label>*/}
-
-                    <br/>
-
-
                 </form>
                 <button onClick={this.handleSubmitRemove}>Remove Sumbit</button>
-                <br/>
                 <button onClick={this.handleSubmitView}>View Sumbit</button>
-                <br/>
 
                 <label>
                     Search
@@ -439,16 +369,6 @@ export default class Admin extends Component {
                     />
                 </label>
                 <button onClick={this.handleSubmitSearch}>Search Sumbit</button>
-
-
-
-
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-
 
                 <h1>Add users</h1>
                 <form onSubmit={this.onSubmit}>
@@ -484,7 +404,7 @@ export default class Admin extends Component {
                         onChange={this.handleInputChangeSignup}
                         required
                     />
-                    <br/>
+                    <br />
                     <input
                         placeholder="Permissions"
                         name="Permissions"
@@ -492,7 +412,7 @@ export default class Admin extends Component {
                         onChange={this.handleInputChangeSignup}
                         required
                     />
-                    <br/>
+                    <br />
                     <button type='submit' className="login_btn login_btn-primary login_btn-block login_btn-large" onClick={this.handleSubmitSignup.bind(this)}>Add a managger</button>
                 </form>
 
