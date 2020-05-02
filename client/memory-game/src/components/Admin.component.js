@@ -16,9 +16,12 @@ export default class Admin extends Component {
             statusMsg: 'Loading...',
             usersList: [],
             searchList: [],
-            _id: ""
+            _id: "",
+            rudeMassege:[]
         };
         this.handleSubmitUpdate = this.handleSubmitUpdate.bind(this);
+        this.handleInputChangeSignup = this.handleInputChangeSignup.bind(this);
+        //   this.handleSubmitRudeMessage = this.handleSubmitRudeMessage.bind(this);
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this);
         this.handleSubmitView = this.handleSubmitView.bind(this);
         this.handleSubmitRemove = this.handleSubmitRemove.bind(this);
@@ -26,6 +29,7 @@ export default class Admin extends Component {
         this.handleSubmitIsBanned = this.handleSubmitIsBanned.bind(this);
         this.handleInputChangeIsBanned = this.handleInputChangeIsBanned.bind(this);
         this.handleInputChangeUpdate = this.handleInputChangeUpdate.bind(this);
+        //  this.handleInputChangeRudeMessage = this.handleInputChangeRudeMessage.bind(this);
         this.handleInputChangeRemove = this.handleInputChangeRemove.bind(this);
         this.handleInputChangeSearch = this.handleInputChangeSearch.bind(this);
         this.handleSubmitBroadSearch = this.handleSubmitBroadSearch.bind(this);
@@ -47,6 +51,41 @@ export default class Admin extends Component {
         });
     }
 
+    async handleSubmitSignup() {
+        console.log(this.state);
+        const response = await axios.get(`${SERVER_ADDRESS}/signup`, {
+            params: {
+                user: this.state.userToRegister,
+                password: this.state.passToRegister,
+                email: this.state.email,
+                country: this.state.country,
+                Permissions: this.state.Permissions,
+                messages: this.state.messages,
+                rudeMessages: this.state.rudeMessages,
+                numOfGames: this.state.numOfGames,
+                numOfVictoryGames: this.state.numOfVictoryGames,
+                isBanned: this.state.isBanned,
+                lat: this.state.lat,
+                lng: this.state.lng
+
+
+            }
+        });
+
+    }
+
+
+
+    handleInputChangeSignup(event) {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        this.setState({
+            [name]: value
+        })
+    }
+
+
     handleInputChangeIsBanned(event) {
         const target = event.target;
         const name = target.name;
@@ -56,6 +95,14 @@ export default class Admin extends Component {
         })
     }
 
+    // handleInputChangeRudeMessage(event) {
+    //     const target = event.target;
+    //     const name = target.name;
+    //     const value = target.value;
+    //     this.setState({
+    //         [name]: value
+    //     })
+    // }
 
     handleInputChangeUpdate(event) {
         const target = event.target;
@@ -106,6 +153,18 @@ export default class Admin extends Component {
         console.log(update.data);
     }
 
+
+    // async handleSubmitRudeMessage() {
+    //     console.log(this.state);
+    //     const RudeMessage = await axios.get(`${SERVER_ADDRESS}/RudeMessage`, {
+    //         params: {
+    //             _id: this.state._id,
+    //             rudeMessages: this.state.rudeMessages
+    //         }
+    //     });
+    //     console.log(RudeMessage.data);
+    // }
+
     async handleSubmitBroadSearch() {
         console.log(this.state);
         const update = await axios.get(`${SERVER_ADDRESS}/BroadSearch`, {
@@ -153,11 +212,13 @@ export default class Admin extends Component {
 
     renderTableData() {
         return this.state.usersList.map((user, index) => {
-            const {name, password, score, email, country, rudeMessages, Permissions, numOfGames, numOfVictoryGames} = user //destructuring
+            const {_id,name, password, score, email, country, rudeMessages, Permissions, numOfGames, numOfVictoryGames,messages} = user //destructuring
             return (
 
                 <tr key={name}>
+                    <td>{_id}</td>
                     <td>{name}</td>
+                    <td>{messages}</td>
                     <td>{password}</td>
                     <td>{score}</td>
                     <td>{email}</td>
@@ -171,25 +232,6 @@ export default class Admin extends Component {
         })
     }
 
-    // renderTableDataSearch() {
-    //     return this.state.searchList.map((user, index) => {
-    //         const { name, password, score, email, country, rudeMessages, Permissions,numOfGames,numOfVictoryGames } = user //destructuring
-    //         return (
-    //
-    //             <tr key={name}>
-    //                 <td>{name}</td>
-    //                 <td>{password}</td>
-    //                 <td>{score}</td>
-    //                 <td>{email}</td>
-    //                 <td>{country}</td>
-    //                 <td>{Permissions}</td>
-    //                 <td>{rudeMessages}</td>
-    //                 <td>{numOfGames}</td>
-    //                 <td>{numOfVictoryGames}</td>
-    //             </tr>
-    //         )
-    //     })
-    // }
 
     async handleSubmitSearch() {
         const search = await axios.get(`${SERVER_ADDRESS}/search`, {
@@ -204,7 +246,7 @@ export default class Admin extends Component {
 
         const search = await axios.get(`${SERVER_ADDRESS}/isBanned`, {
             params: {
-                name: this.state.name
+                _id: this.state._id
             }
         });
         console.log(search.data);
@@ -233,6 +275,37 @@ export default class Admin extends Component {
                 <a className="btn" href='/' onClick={(e) => {
                     localStorage.removeItem('user')
                 }}>Logout</a>
+
+                {/*<form>*/}
+                {/*    <label>*/}
+                {/*        ID name:*/}
+                {/*        <input*/}
+                {/*            name="_id"*/}
+                {/*            type="text"*/}
+                {/*            onChange={this.handleInputChangeRudeMessage}*/}
+                {/*        />*/}
+                {/*    </label>*/}
+                {/*    <br/>*/}
+                {/*    <label>*/}
+                {/*        rudeMasseges:*/}
+                {/*        <input*/}
+                {/*            name="rudeMasseges"*/}
+                {/*            type="text"*/}
+                {/*            onChange={this.handleInputChangeRudeMessage}*/}
+                {/*        />*/}
+                {/*    </label>*/}
+                {/*    <br/>*/}
+                {/*</form>*/}
+                {/*<button onClick={this.handleSubmitRudeMessage}>RudeMessage Sumbit</button>*/}
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
 
                 <form>
                     <label>
@@ -271,7 +344,7 @@ export default class Admin extends Component {
                 <label>
                     isBanned:
                     <input
-                        name="name"
+                        name="_id"
                         // value={this.state.user}
                         type="text"
                         onChange={this.handleInputChangeIsBanned}
@@ -364,6 +437,62 @@ export default class Admin extends Component {
                     />
                 </label>
                 <button onClick={this.handleSubmitSearch}>Search Sumbit</button>
+
+
+
+
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+
+                <h1>Signup</h1>
+                <form onSubmit={this.onSubmit}>
+                    <input
+                        placeholder="User"
+                        name="userToRegister"
+                        type="text"
+                        onChange={this.handleInputChangeSignup}
+                        required
+                    />
+                    <br />
+                    <input
+                        placeholder="Password"
+                        name="passToRegister"
+                        // value={this.state.user}
+                        type="password"
+                        onChange={this.handleInputChangeSignup}
+                        required
+                    />
+                    <br />
+                    <input
+                        placeholder="Email"
+                        name="email"
+                        type="text"
+                        onChange={this.handleInputChangeSignup}
+                        required
+                    />
+                    <br />
+                    <input
+                        placeholder="Country"
+                        name="country"
+                        type="text"
+                        onChange={this.handleInputChangeSignup}
+                        required
+                    />
+                    <br/>
+                    <input
+                        placeholder="Permissions"
+                        name="Permissions"
+                        type="text"
+                        onChange={this.handleInputChangeSignup}
+                        required
+                    />
+                    <br/>
+                    <button type='submit' className="login_btn login_btn-primary login_btn-block login_btn-large" onClick={this.handleSubmitSignup.bind(this)}>Add a managger</button>
+                </form>
 
             </div>
 
