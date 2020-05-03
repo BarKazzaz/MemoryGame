@@ -4,6 +4,7 @@ const Room = require(path.join(__dirname, "Room"));
 const Player = require(path.join(__dirname, "Player"));
 const ClassifierPromise = require(path.join(__dirname, "MessageClassifier"));
 const Model = require(path.join(__dirname, "model/model.js"));
+const nodemailer = require('nodemailer');
 
 let MessageClassifier;
 ClassifierPromise().then((cls) => {
@@ -106,7 +107,42 @@ function deleteRoom(name) {
 function getRoom(name) {
     return roomsList.find(r => r.name === name)
 }
+function sendEmail(toMail, password) {
+    console.log('mailing:', toMail, password);
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        port: 587,
+        secure: false,
+        auth:
+        {
+            user: 'legendsMemeryGame@gmail.com',
+            pass: 'sW7dras_phe'
+        }
+    });
+
+    var mailOptions = {
+        from: 'legendsMemeryGame@gmail.com',
+        to: toMail,
+        subject: 'Memory Game Password Reset',
+        text: ["Dear player, ",
+            "Here is your new temporary password: ",
+            "New Password",
+            password,
+            "This is an automated mail please do not reply.",
+            "Thank you, ",
+            "Legends-Memory-Game Team"].join('\n')
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
 
 module.exports = {
-    setListeners: setListeners
+    setListeners: setListeners,
+    sendEmail: sendEmail
 }

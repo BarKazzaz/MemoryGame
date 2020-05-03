@@ -31,7 +31,7 @@ export default class Login extends Component {
         // if user not found OR server login error
         if (response.data.type === 'ERROR') return this.setState({ status: 'error' });
         // user found
-        else if (response.data.type === 'OK'){
+        else if (response.data.type === 'OK') {
             console.log(response.data.content);
             localStorage.setItem('user', JSON.stringify(response.data.content));
             if (response.data.content.Permissions === 'admin') {
@@ -55,6 +55,17 @@ export default class Login extends Component {
 
     onSubmit = (e) => e.preventDefault();
 
+    forgotPass(event) {
+        // send to /api/forgot
+        axios.get(`${SERVER_ADDRESS}/api/forgot`, {
+            params: {
+                user: this.state.user
+            }
+        })
+            .then(res => {if(res.data.type === 'MAILED') this.setState({status: 'MAILED'}); console.log(res)})
+            .catch(res => console.log(res))
+    }
+
     element =
         <div className="login">
             <h1>Login</h1>
@@ -64,9 +75,18 @@ export default class Login extends Component {
                 <button type='submit' className="login_btn login_btn-primary login_btn-block login_btn-large" onClick={this.handleSubmit.bind(this)}>Let me in.</button>
             </form>
             <Link className="login_btn login_btn-secondary login_btn-block login_btn-small" to='/signup'>register</Link>
+            <span onClick={this.forgotPass.bind(this)} style={{ color: 'red', cursor: 'pointer' }}>forgot password</span>
         </div>
 
     render() {
+        if (this.state.status === 'MAILED'){
+            return (
+                <div>
+                    <h1>Mail sent!</h1>
+                    <p>Please check your email for updates</p>
+                </div>
+            )
+        }
         if (this.state.status === 'before')
             return (
                 <div>

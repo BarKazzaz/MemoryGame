@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require("path");
 const Model = require(path.join(__dirname, '..', 'model', 'model.js'));
+const sendEmail = require(path.join(__dirname, '..', 'ServerHelpers.js')).sendEmail;
 
 router.get('/getAllCountries', (req, res, next) => {
     // countries = [{ country: 'Israel', coordinates: { lat: 0, lng: 0 } }, { country: 'USA', coordinates: { lat: 10, lng: 10 } }];
@@ -71,6 +72,20 @@ router.get("/search", (req, res) => {
         msg = { 'type': 'ERROR', 'content': err };
         res.json(msg)
     });
+});
+
+router.get("/forgot", (req, res) => {
+    console.log('requested', req.query)
+    const pass = '_' + Math.random().toString(36).substr(2, 9);
+    Model.findUserByName(req.query.user)
+    .then(data =>{
+        Model.updateUserById(data._id, { password: pass})
+            .then(data => {
+                console.log('DATA:', data.value.email);
+                sendEmail(data.value.email, pass);
+                res.json({ type: 'MAILED', content: data })
+            }).catch(err => res.json({ type: "ERROR", content: err }))
+    }).catch(err => res.json({ type: "ERROR", content: err }))
 });
 
 module.exports = router;
