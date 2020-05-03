@@ -32,14 +32,14 @@ router.get('/addToRudeMessages', (req, res, next) => {
 })
 
 router.get('/addToVictoryGames', (req, res, next) => {
-    Model.getUserById(req.query.id)
+    Model.addToVictoryGames(req.query.id)
         .then(data => {
             res.json({ type: 'OK', content: data })
         }).catch(err => res.json({ type: "ERROR", content: err }))
 })
 
 router.get('/addToGames', (req, res, next) => {
-    Model.getUserById(req.query.id)
+    Model.addToGames(req.query.id)
         .then(data => {
             res.json({ type: 'OK', content: data })
         }).catch(err => res.json({ type: "ERROR", content: err }))

@@ -54,6 +54,8 @@ export default class Game extends Component {
             this.setState({ room: data.room, cardElms: cardElms, myPlayerId: data.id, gameState: "connected" })
         });
         this.state.socket.on("lets start", (data) => {
+            fetch(`${SERVER_ADDRESS}/api/addToGames?id=${JSON.parse(localStorage.getItem('user'))._id}`)
+                .catch(err => console.log('err adding game', err));
             if (data.startingPlayer !== this.state.myPlayerId) {
                 // if i am the second player to join
                 data.players = data.players.map((e, i) => data.players[(i + 1) % 2]);
@@ -179,9 +181,11 @@ export default class Game extends Component {
         } else if (this.state.gameState === "ended") {
             const result = this.state.score.player1 - this.state.score.player2;
             let resMessage;
-            if (result > 0)
-                resMessage = "WIN!"
-            else if (result < 0)
+            if (result > 0) {
+                resMessage = "WIN!";
+                fetch(`${SERVER_ADDRESS}/api/addToVictoryGames?id=${JSON.parse(localStorage.getItem('user'))._id}`)
+                    .catch(err => console.log('err win', err));
+            } else if (result < 0)
                 resMessage = "Losing game"
             else
                 resMessage = "Draw.."
