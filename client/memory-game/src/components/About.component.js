@@ -28,13 +28,22 @@ export default class About extends Component {
                 <h2>We have users all around the world</h2>
                 <div style={{ height: '75vh' }}>
                     <Map countries={this.state.countries} />
+                    <h2>How to play:</h2>
+                    <video width="320" height="240" controls>
+                        <source src="/videos/Memory.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-                <div className='pie' id='countriesPie'>
-                    <p>Users chart:</p>
-                    <SimplePieChart data={this.state.countries} />
-                </div>
-                <p style={{ color: 'red' }}>Found a bug? Got banned?</p>
-                <p style={{ color: 'red' }}>contact us at barkazzaz@gmail.com</p>
+                <aside>
+                    <div className='pie' id='countriesPie'>
+                        <p>Users chart:</p>
+                        <SimplePieChart data={this.state.countries} />
+                    </div>
+                </aside>
+                <footer>
+                    <p style={{ color: 'red' }}>Found a bug? Got banned?</p>
+                    <p style={{ color: 'red' }}>contact us at barkazzaz@gmail.com</p>
+                </footer>
             </div>
         )
     }
