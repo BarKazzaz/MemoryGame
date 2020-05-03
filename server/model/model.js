@@ -174,6 +174,21 @@ function removeUserById(id) {
             .catch(err => reject(err))
     })
 }
+function addToMessages(id){
+    // this increments messages
+    return new Promise((resolve, reject) => {
+        let o_id = new mongo.ObjectID(id);
+        getUserById(id)
+            .then((data) => {
+                const query = { "_id": o_id };
+                const collection = client.db("Legends-Memory-Game").collection("Users");
+                data.messages++;
+                collection.updateOne(query, { $set: { messages: data.messages } })
+                    .then(data => resolve(data))
+                    .catch(err => reject(err))
+            }).catch(err => reject(err));
+    })
+}
 
 function addToRudeMessages(id, message) {
     return new Promise((resolve, reject) => {
@@ -257,6 +272,7 @@ module.exports = {
     initConnection: initConnection,
     isBannedFunction: isBannedFunction,
     getUserById: getUserById,
+    addToMessages: addToMessages,
     addToRudeMessages: addToRudeMessages,
     addToGames: addToGames,
     addToVictoryGames: addToVictoryGames,

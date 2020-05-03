@@ -72,10 +72,13 @@ function setListeners(socketIo, socket) {
         socketIo.sockets.in(data.room).emit("flipCard", data.cardIndexes);
     });
     socket.on("chatMsg", (data) => {
-        //TODO: check for bad words
+        // check for bad words
         let msgClass = MessageClassifier.classify(data.message.content);
         // let msgClassication = MessageClassifier.getClassifications(data.message.content);
         console.log(msgClass);
+        Model.addToMessages(data.message.from)
+            .then(data => console.log(data))
+            .catch(err => console.log(err))
         if (msgClass === 'negative')
             Model.addToRudeMessages(data.message.from, data.message.content)
                 .then(data => {
@@ -85,7 +88,6 @@ function setListeners(socketIo, socket) {
     });
     socket.on("leaver", (data) => {
         //data = {room : id, player : id}
-        //TODO: DB should be updated
         const room = getRoom(data.room);
         if (!room) return;
         room.removePlayer(data.player);
