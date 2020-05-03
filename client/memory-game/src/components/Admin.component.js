@@ -411,7 +411,7 @@ export default class Admin extends Component {
     }
 
     removeSelectedUser() {
-        if(this.state.clickedUser === JSON.parse(localStorage.getItem('user'))._id)
+        if (this.state.clickedUser === JSON.parse(localStorage.getItem('user'))._id)
             this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' });
         if (this.state.clickedUser) {
             this.setState({ status: 'deleting', statusMessage: `Deleting user: ${this.state.clickedUser}` })
@@ -423,7 +423,7 @@ export default class Admin extends Component {
                     })
                 }).then(data => { console.log("deleted successfully", data); this.setState({ status: 'ready' }) })
                 .catch((err) => console.error("error deleting", err))
-                .finally(() => { this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' }); this.handleSubmitSearch()})
+                .finally(() => { this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' }); this.handleSubmitSearch() })
         }
     }
 
@@ -442,16 +442,6 @@ export default class Admin extends Component {
         return (
             <div id="admin_body">
                 {editOrRemove}
-                <a className="btn" href='/' onClick={(e) => {
-                    localStorage.removeItem('user')
-                }}>Logout</a>
-                {/* <form onSubmit={this.handleSubmit}> */}
-                <table id='users'>
-                    <tbody>
-                        <tr>{this.renderTableHeader()}</tr>
-                        {this.renderTableData()}
-                    </tbody>
-                </table>
                 <form onSubmit={this.onSubmit}>
                     <label>
                         Search
@@ -490,8 +480,18 @@ export default class Admin extends Component {
                     </label>
                     <br />
                     <button onClick={this.handleSubmitSearch}>Search</button>
-                    {saveButton}
                 </form>
+                {/* <form onSubmit={this.handleSubmit}> */}
+                <table id='users'>
+                    <tbody>
+                        <tr>{this.renderTableHeader()}</tr>
+                        {this.renderTableData()}
+                    </tbody>
+                </table>
+                {saveButton}
+                <a className="btn" href='/' onClick={(e) => {
+                    localStorage.removeItem('user')
+                }}>Logout</a>
             </div>
         )
     }

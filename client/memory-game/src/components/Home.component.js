@@ -43,7 +43,7 @@ export default class Home extends Component {
         .then(data =>
           this.setState({
             status: this.state.status || 'ready',
-            games: data.content.numOfGames,
+            games: data.content.numOfGames - data.content.numOfVictoryGames,
             victories: data.content.numOfVictoryGames
           }))
         .catch(err => {
@@ -69,13 +69,13 @@ export default class Home extends Component {
                 <Route exact path="/">
                   <section>
                     <div className="pie" id='winsPie'>
-                      <p>Wins/Losses:</p>
+                      <p><span style={{ color: 'green', fontSize: '2em' }}>Wins</span>|<span style={{ color: 'blue', fontSize: '2em' }}>Losses</span></p>
                       <SimplePieChart games={this.state.games} victories={this.state.victories} />
                     </div>
                   </section>
                   <nav>
                     <Link className="btn" id="game_btn" to="/game">Play Game</Link>
-                    <Link className="btn" id="game_btn" to="/about">About us</Link>
+                    <Link className="btn" id="game_btn" to="/about">Extras</Link>
                     <a className="btn" href='/' onClick={(e) => { localStorage.removeItem('user') }}>Logout</a>
                   </nav>
                   <p dir="ltr" style={{ position: 'absolute', bottom: '30px', left: '600px' }} >  <iframe src="https://www.facebook.com/plugins/page.php?href=https://www.facebook.com/Memory-Game-102062231427241&tabs&width=500&height=70&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="450" height="80" style={{ border: 'none', overflow: 'hidden' }} scrolling="no" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe></p>
