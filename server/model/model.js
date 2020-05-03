@@ -143,7 +143,7 @@ function getUserById(id) {
 }
 
 function updateUserById(id, newValues) {
-    console.log("in update",id, newValues);
+    console.log("in update", id, newValues);
     return new Promise((resolve, reject) => {
         let o_id = new mongo.ObjectID(id);
         const query = { "_id": o_id };
@@ -174,7 +174,7 @@ function removeUserById(id) {
             .catch(err => reject(err))
     })
 }
-function addToMessages(id){
+function addToMessages(id) {
     // this increments messages
     return new Promise((resolve, reject) => {
         let o_id = new mongo.ObjectID(id);
@@ -193,13 +193,20 @@ function addToMessages(id){
 function addToRudeMessages(id, message) {
     return new Promise((resolve, reject) => {
         let o_id = new mongo.ObjectID(id);
+        let newValues = {};
         getUserById(id)
             .then((data) => {
                 const query = { "_id": o_id };
                 const collection = client.db("Legends-Memory-Game").collection("Users");
                 if (data.rudeMessages[0] === '') data.rudeMessages[0] = message
-                else data.rudeMessages.push(message);
-                collection.updateOne(query, { $set: { rudeMessages: data.rudeMessages } })
+                else {
+                    data.rudeMessages.push(message);
+                    if(data.rudeMessages.length >= 5){
+                        newValues.isBanned = true
+                    }
+                }
+                newValues.rudeMessages = data.rudeMessages
+                collection.updateOne(query, { $set: newValues })
                     .then(data => resolve(data))
                     .catch(err => reject(err))
             }).catch(err => reject(err));
