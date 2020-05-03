@@ -36,7 +36,7 @@ function generateCardsBoard() {
     }
     return arr;
 }
-const NAMES = ["Bar", "Kazzaz", "Kazza", "Baruch", "Barboor", "Kazu"];
+
 function setListeners(socketIo, socket) {
     socket.on("quickPlay", (data) => {
         console.log("your name is:", data);
@@ -45,7 +45,7 @@ function setListeners(socketIo, socket) {
         player.id = data.id;
         player.name = data.name;
         for (let room of roomsList) {
-            if (room.players.length < maxPlayers) {
+            if ((room.players.length < maxPlayers) && !room.players.find(p => p.id === player.id)) {
                 room.players.push(player);
                 socket.join(room.name);
                 foundRoom = true;
