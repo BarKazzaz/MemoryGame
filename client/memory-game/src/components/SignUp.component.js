@@ -118,17 +118,17 @@ export default class SignUp extends Component {
                         />
                         <br />
                         <input
-                            placeholder="Password"
-                            name="passToRegister"
-                            type="password"
+                            placeholder="Email"
+                            name="email"
+                            type="text"
                             onChange={this.handleInputChange}
                             required
                         />
                         <br />
                         <input
-                            placeholder="Email"
-                            name="email"
-                            type="text"
+                            placeholder="Password"
+                            name="passToRegister"
+                            type="password"
                             onChange={this.handleInputChange}
                             required
                         />

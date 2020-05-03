@@ -58,8 +58,6 @@ async function update(query, newValues, callback) {
     const user = query.name;
     const password = query.password;
     const email = query.email;
-
-
     const foundUser = await findUserByName(user);
     // console.log(foundUser);
     if (foundUser != null) {
@@ -87,7 +85,6 @@ async function remove(query, callback) {
 async function insertUser(userName, passwordName, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames, isBanned, lat, lng) {
     const collection = client.db("Legends-Memory-Game").collection("Users");
     console.log(userName);
-
     try {
         await collection.insertOne({
             name: userName,
@@ -145,6 +142,29 @@ function getUserById(id) {
     })
 }
 
+function updateUserById(id, newValues) {
+    return new Promise((resolve, reject) => {
+        let o_id = new mongo.ObjectID(id);
+        delete (newValues._id);
+        const query = { "_id": o_id };
+        const collection = client.db("Legends-Memory-Game").collection("Users");
+        collection.findOneAndUpdate(query, { $set: newValues })
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+    })
+}
+
+function removeUserById(id) {
+    return new Promise((resolve, reject) => {
+        let o_id = new mongo.ObjectID(id);
+        const query = { "_id": o_id };
+        const collection = client.db("Legends-Memory-Game").collection("Users");
+        collection.deleteOne(query)
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+    })
+}
+
 function addToRudeMessages(id, message) {
     return new Promise((resolve, reject) => {
         let o_id = new mongo.ObjectID(id);
@@ -152,12 +172,11 @@ function addToRudeMessages(id, message) {
             .then((data) => {
                 const query = { "_id": o_id };
                 const collection = client.db("Legends-Memory-Game").collection("Users");
-                if(data.rudeMessages[0] === '') data.rudeMessages[0] = message
+                if (data.rudeMessages[0] === '') data.rudeMessages[0] = message
                 else data.rudeMessages.push(message);
-                console.log('rudes', data.rudeMessages);
-                collection.updateOne(query, {$set: {rudeMessages: data.rudeMessages}})
-                .then(data=>resolve(data))
-                .catch(err => reject(err))
+                collection.updateOne(query, { $set: { rudeMessages: data.rudeMessages } })
+                    .then(data => resolve(data))
+                    .catch(err => reject(err))
             }).catch(err => reject(err));
     })
 }
@@ -170,8 +189,8 @@ function addToVictoryGames(id) {
             .then((data) => {
                 const query = { "_id": o_id };
                 const collection = client.db("Legends-Memory-Game").collection("Users");
-                collection.updateOne(query, {$set: {numOfVictoryGames: data.numOfVictoryGames+1}})
-                    .then(data=>resolve(data))
+                collection.updateOne(query, { $set: { numOfVictoryGames: data.numOfVictoryGames + 1 } })
+                    .then(data => resolve(data))
                     .catch(err => reject(err))
             }).catch(err => reject(err));
     })
@@ -185,10 +204,26 @@ function addToGames(id) {
             .then((data) => {
                 const query = { "_id": o_id };
                 const collection = client.db("Legends-Memory-Game").collection("Users");
-                collection.updateOne(query, {$set: {numOfGames: data.numOfGames+1}})
-                    .then(data=>resolve(data))
+                collection.updateOne(query, { $set: { numOfGames: data.numOfGames + 1 } })
+                    .then(data => resolve(data))
                     .catch(err => reject(err))
             }).catch(err => reject(err));
+    })
+}
+
+function findUser(query) {
+    let newQuery = query;
+    return new Promise((resolve, reject) => {
+        for (let key in newQuery) {
+            if (!newQuery[key]) {
+                delete (newQuery[key])
+            }
+        }
+        const collection = client.db("Legends-Memory-Game").collection("Users");
+        collection.find(newQuery).toArray(function (err, result) {
+            if (err) reject(err);
+            resolve(result);
+        });
     })
 }
 
@@ -207,5 +242,8 @@ module.exports = {
     isBannedFunction: isBannedFunction,
     getUserById: getUserById,
     addToRudeMessages: addToRudeMessages,
-    addToVictoryGames:addToVictoryGames
+    addToVictoryGames: addToVictoryGames,
+    updateUserById: updateUserById,
+    removeUserById: removeUserById,
+    findUser: findUser
 };

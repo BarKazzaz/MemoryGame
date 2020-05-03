@@ -57,23 +57,6 @@ app.get("/signup", (req, res)=>{
     });
 });
 
-
-
-app.get("/update", (req, _res) => {
-    const _name = req.query.user;
-    const password = req.query.password;
-    const email = req.query.email;
-    const country = req.query.country;
-    console.log(_name);
-    console.log(password);
-    console.log(email);
-    let myQuery = { name : _name , email : email, password : password};
-    let newVals = { $set: req.body.vals };
-    Model.update(myQuery, newVals, (err, res) => {
-        err ? console.error(err) : _res.json({"updated": req.body})
-    });
-});
-
 app.get("/remove", (req, _res) => {
     const country = req.query.country;
     console.log(country);
@@ -82,20 +65,6 @@ app.get("/remove", (req, _res) => {
     Model.remove(myQuery,  (err, res) => {
         err ? console.error(err) : _res.json({"remove": req.body})
     });
-});
-
-
-app.get("/search",(req,res)=>{
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    const country = req.query.country;
-    const userFound = Model.findUserByCountry(country).then((data)=>{
-        msg = {'type': 'OK', 'content': data}
-        res.json(msg)
-    }).catch(err => {
-        msg = {'type':'ERROR','content': err};
-        res.json(msg)
-    });
-
 });
 
 app.get("/listUsers",(req,res)=>{

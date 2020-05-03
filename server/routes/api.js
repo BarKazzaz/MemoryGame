@@ -17,32 +17,59 @@ router.get('/getAllCountries', (req, res, next) => {
 
 router.get('/getUserById', (req, res, next) => {
     Model.getUserById(req.query.id)
-    .then(data => {
-        // filter out password before response is sent
-        delete(data.password);
-        res.json({ type: 'OK', content: data })
-    }).catch(err => res.json({ type: "ERROR", content: err}))
+        .then(data => {
+            // filter out password before response is sent
+            delete (data.password);
+            res.json({ type: 'OK', content: data })
+        }).catch(err => res.json({ type: "ERROR", content: err }))
 })
 
 router.get('/addToRudeMessages', (req, res, next) => {
     Model.getUserById(req.query.id, req.query.message)
-    .then(data => {
-        res.json({ type: 'OK', content: data })
-    }).catch(err => res.json({ type: "ERROR", content: err}))
+        .then(data => {
+            res.json({ type: 'OK', content: data })
+        }).catch(err => res.json({ type: "ERROR", content: err }))
 })
 
 router.get('/addToVictoryGames', (req, res, next) => {
     Model.getUserById(req.query.id)
         .then(data => {
             res.json({ type: 'OK', content: data })
-        }).catch(err => res.json({ type: "ERROR", content: err}))
+        }).catch(err => res.json({ type: "ERROR", content: err }))
 })
 
 router.get('/addToGames', (req, res, next) => {
     Model.getUserById(req.query.id)
         .then(data => {
             res.json({ type: 'OK', content: data })
-        }).catch(err => res.json({ type: "ERROR", content: err}))
+        }).catch(err => res.json({ type: "ERROR", content: err }))
 })
+
+router.get("/update", (req, res) => {
+    console.log("all query patams", req.query);
+    if (req.query.rudeMessages)
+        req.query.rudeMessages = req.query.rudeMessages.split(';');
+    Model.updateUserById(req.query._id, req.query)
+        .then(data => {
+            res.json({ type: 'OK', content: data })
+        }).catch(err => res.json({ type: "ERROR", content: err }))
+})
+
+router.get("/remove", (req, res) => {
+    Model.removeUserById(req.query._id, req.query)
+        .then(data => {
+            res.json({ type: 'OK', content: data })
+        }).catch(err => res.json({ type: "ERROR", content: err }))
+})
+router.get("/search", (req, res) => {
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    Model.findUser(req.query).then((data) => {
+        msg = { 'type': 'OK', 'content': data }
+        res.json(msg)
+    }).catch(err => {
+        msg = { 'type': 'ERROR', 'content': err };
+        res.json(msg)
+    });
+});
 
 module.exports = router;

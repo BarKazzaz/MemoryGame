@@ -1,8 +1,8 @@
 #admin_body {
     height: 100vh;
     width: 100vw;
-    background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(218,218,255,1) 0%, rgba(144,208,221,1) 100%);
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(218, 218, 255, 1) 0%, rgba(144, 208, 221, 1) 100%);
 }
 #admin_title {
     text-align: center;
@@ -19,7 +19,7 @@
     border: 1px solid #ddd;
     padding: 8px;
 }
-#users tr{
+#users tr {
     background-color: #dadada;
 }
 #users tr:nth-child(even) {
@@ -34,4 +34,21 @@
     text-align: center;
     background-color: #4CAF50;
     color: white;
+}
+#editOrRemove {
+    position: absolute;
+    left: 38%;
+    top: 25%;
+    height: 20%;
+    width: 20%;
+    display: grid;
+}
+#editOrRemove button {
+    cursor: pointer;
+}
+.admin_save {
+    background: rgba(253, 29, 29, 1);
+    background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 0%, rgba(252, 176, 69, 1) 100%);
+    margin-left: 25%;
+    width: 50%;
 }
