@@ -45,8 +45,16 @@ app.get("/signup", (req, res)=>{
     let rudeMessages = [''];
     let numOfVictoryGames = 0;
     let isBanned = false;
-    Model.insertUser(userName, passwordname, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames, isBanned, lat, lng);
-    res.json({type:'OK', content: 'done'});
+    let isFound = Model.findUserByName(userName).then(isFound=> {
+        if(isFound) {
+            console.log(isFound)
+            res.json({type: 'userFound', content: 'done'});
+        }
+        else {
+             Model.insertUser(userName, passwordname, email, country, Permissions, messages, rudeMessages, numOfGames, numOfVictoryGames, isBanned, lat, lng);
+            res.json({type: 'OK', content: 'done'});
+        }
+    });
 });
 
 

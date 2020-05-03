@@ -78,9 +78,13 @@ export default class SignUp extends Component {
                 Permissions: this.state.Permissions
             }
         });
-        console.log(response.data);
+        if(response.data.type==='userFound'){
+                window.alert("this name is exist, please enter another name")
+            setTimeout(() => { window.location = '/signup' }, 500);
+        }
+        else
         setTimeout(() => { window.location = '/' }, 500);
-    }
+     }
 
     onSubmit = (e) => e.preventDefault();
 
