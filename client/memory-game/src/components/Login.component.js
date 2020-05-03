@@ -75,7 +75,7 @@ export default class Login extends Component {
                 <button type='submit' className="login_btn login_btn-primary login_btn-block login_btn-large" onClick={this.handleSubmit.bind(this)}>Let me in.</button>
             </form>
             <Link className="login_btn login_btn-secondary login_btn-block login_btn-small" to='/signup'>register</Link>
-            <span onClick={this.forgotPass.bind(this)} style={{ color: 'red', cursor: 'pointer' }}>forgot password</span>
+            <span className="forgot_btn" onClick={this.forgotPass.bind(this)}>forgot password</span>
         </div>
 
     render() {

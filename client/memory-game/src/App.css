@@ -141,3 +141,13 @@ nav {
     opacity: 1;
     border-radius: 100%;
 }
+
+.forgot_btn{
+    cursor: pointer;
+    color: red;
+    transition: color 0.5s;
+}
+
+.forgot_btn:hover{
+    color: lightgrey;
+}
