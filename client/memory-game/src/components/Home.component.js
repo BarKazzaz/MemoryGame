@@ -18,30 +18,37 @@ export default class Home extends Component {
       perm: null,
       games: 0,
       victories: 0,
-      status: 'pending'
+      status: ''
     }
   }
 
   componentDidMount() {
     let usr = JSON.parse(localStorage.getItem('user'));
     if (usr) {
-      this.setState({perm: usr.Permissions})
-      fetch(`${SERVER_ADDRESS}/api/getUserById?id=${usr.id}`, {
-        params: {}
-      })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data);
-            return new Promise((resolve, reject) => resolve(data))
-          })
-          .then(data => this.setState({
-            status: 'ready',
+      this.setState({ perm: usr.Permissions })
+      fetch(`${SERVER_ADDRESS}/api/getUserById?id=${usr._id}`)
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          if (data.content.isBanned) {
+            console.log("banned user")
+            this.setState({ status: 'banned' })
+          }
+          if (data.type === 'ERROR') {
+            this.setState({ status: 'noUser' });
+            localStorage.removeItem('user');
+          }
+          return new Promise((resolve, reject) => resolve(data))
+        })
+        .then(data =>
+          this.setState({
+            status: this.state.status || 'ready',
             games: data.content.numOfGames,
             victories: data.content.numOfVictoryGames
           }))
-          .catch(err => {
-            console.log(err)
-          });
+        .catch(err => {
+          console.log(err)
+        });
     }
   }
 
@@ -49,7 +56,7 @@ export default class Home extends Component {
     if (!this.state.perm || this.state.perm === 'guest') return <Login />
     if (this.state.perm === 'admin') return <Admin />
     if (this.state.perm === 'user')
-      if (this.state.status === 'ready')
+      if (this.state.status === 'ready') {
         return (
           <div className="Home">
             <header className="Home-header">
@@ -59,7 +66,7 @@ export default class Home extends Component {
             </header>
             <section>
               <div id='countriesPie' style={{ position: 'fixed', top: '50%', backgroundColor: 'lightBlue', opacity: '1', borderRadius: '100%' }}>
-                <p>Users chart:</p>
+                <p>Wins/Losses:</p>
                 <SimplePieChart games={this.state.games} victories={this.state.victories} />
               </div>
             </section>
@@ -87,6 +94,8 @@ export default class Home extends Component {
             </Router>
           </div>
         )
+      } else if (this.state.status === 'banned') return (<div><h1>Your user is banned</h1><p>for more information contact barkazzaz@gmail.com</p></div>)
+      else if (this.state.status === 'noUser') return (<div><h1>No such user</h1><p>for more information contact barkazzaz@gmail.com</p></div>)
       else
         return (
           <div>
