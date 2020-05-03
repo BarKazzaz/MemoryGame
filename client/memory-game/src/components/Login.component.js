@@ -18,6 +18,23 @@ export default class Login extends Component {
     }
     compStyle = {}
 
+
+    componentDidMount() {
+        var c = document.getElementById("canvasLogo");
+        var ctx = c.getContext("2d");
+        ctx.font = "60px Arial";
+        // Create gradient
+
+        var gradient = ctx.createLinearGradient(0, 0, c.width, 0);
+        gradient.addColorStop("0", "magenta");
+        gradient.addColorStop("0.5", "blue");
+        gradient.addColorStop("1.0", "red");
+
+        // Fill with gradient
+        ctx.strokeStyle = gradient;
+        ctx.strokeText("Memory!", 10, 90);
+    }
+
     async handleSubmit(event) {
         if (!this.state.user || !this.state.pass) return;
         this.setState({ status: 'waiting' });
@@ -62,9 +79,11 @@ export default class Login extends Component {
                 user: this.state.user
             }
         })
-            .then(res => {if(res.data.type === 'MAILED') this.setState({status: 'MAILED'}); console.log(res)})
+            .then(res => { if (res.data.type === 'MAILED') this.setState({ status: 'MAILED' }); console.log(res) })
             .catch(res => console.log(res))
     }
+
+    canv = <canvas id="canvasLogo"></canvas>
 
     element =
         <div className="login">
@@ -79,9 +98,10 @@ export default class Login extends Component {
         </div>
 
     render() {
-        if (this.state.status === 'MAILED'){
+        if (this.state.status === 'MAILED') {
             return (
                 <div>
+                    {this.canv}
                     <h1>Mail sent!</h1>
                     <p>Please check your email for updates</p>
                 </div>
@@ -90,12 +110,14 @@ export default class Login extends Component {
         if (this.state.status === 'before')
             return (
                 <div>
+                    {this.canv}
                     {this.element}
                 </div>
             )
         else if (this.state.status === 'waiting')
             return (
                 <div className="login">
+                    {this.canv}
                     <h1 style={{ fontSize: 'smaller' }}>Sending..</h1>
                 </div>
             )
@@ -103,6 +125,7 @@ export default class Login extends Component {
             setTimeout(() => this.setState({ status: 'before', user: '', pass: '' }), 800);
             return (
                 <div className="login">
+                    {this.canv}
                     <h1 style={{ color: 'red' }}>Wrong Username or Password</h1>
                 </div>
             )
