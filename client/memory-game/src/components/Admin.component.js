@@ -346,7 +346,7 @@ export default class Admin extends Component {
 
     handleBannedClicked(event) {
         if (event.target.checked)
-            this.setState({ isBanned: `${event.target.checked}` })
+            this.setState({ isBanned: event.target.checked })
         else
             this.setState({ isBanned: `` })
     }
@@ -391,7 +391,7 @@ export default class Admin extends Component {
                     country: user.country,
                     Permissions: user.Permissions,
                     messages: user.messages,
-                    rudeMessages: user.rudeMessages.toString().replace(',', ';'),
+                    rudeMessages: user.rudeMessages.toString(),
                     numOfGames: user.numOfGames,
                     numOfVictoryGames: user.numOfVictoryGames,
                     isBanned: user.isBanned,
@@ -401,7 +401,7 @@ export default class Admin extends Component {
             })
         }).then(data => { console.log("updated successfully", data); this.setState({ status: 'ready' }) })
             .catch((err) => console.error("error updating", err))
-            .finally(() => this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' }))
+            .finally(() => this.setState({ status: 'ready', clickedUser: '', updatedUsers: [], editOrRemove: '' }))
     }
 
     SubmitEditOrRemove(e) {
@@ -411,6 +411,8 @@ export default class Admin extends Component {
     }
 
     removeSelectedUser() {
+        if(this.state.clickedUser === JSON.parse(localStorage.getItem('user'))._id)
+            this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' });
         if (this.state.clickedUser) {
             this.setState({ status: 'deleting', statusMessage: `Deleting user: ${this.state.clickedUser}` })
             new Promise((resolve, reject) => resolve(this.state.usersList.filter(e => e._id === this.state.clickedUser)[0]))
@@ -421,7 +423,7 @@ export default class Admin extends Component {
                     })
                 }).then(data => { console.log("deleted successfully", data); this.setState({ status: 'ready' }) })
                 .catch((err) => console.error("error deleting", err))
-                .finally(() => { this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' }); this.handleSubmitSearch()})//////////// BAR IS HERE
+                .finally(() => { this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' }); this.handleSubmitSearch()})
         }
     }
 
@@ -487,7 +489,7 @@ export default class Admin extends Component {
                         />
                     </label>
                     <br />
-                    <button onClick={this.handleSubmitSearch}>Search Sumbit</button>
+                    <button onClick={this.handleSubmitSearch}>Search</button>
                     {saveButton}
                 </form>
             </div>

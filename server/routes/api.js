@@ -47,12 +47,13 @@ router.get('/addToGames', (req, res, next) => {
 
 router.get("/update", (req, res) => {
     console.log("all query patams", req.query);
-    if (req.query.rudeMessages)
-        req.query.rudeMessages = req.query.rudeMessages.split(';');
-    Model.updateUserById(req.query._id, req.query)
-        .then(data => {
-            res.json({ type: 'OK', content: data })
-        }).catch(err => res.json({ type: "ERROR", content: err }))
+    if (req.query.rudeMessages) {
+        req.query.rudeMessages = req.query.rudeMessages.split(',')
+        Model.updateUserById(req.query._id, req.query)
+            .then(data => {
+                res.json({ type: 'OK', content: data })
+            }).catch(err => res.json({ type: "ERROR", content: err }))
+    }
 })
 
 router.get("/remove", (req, res) => {

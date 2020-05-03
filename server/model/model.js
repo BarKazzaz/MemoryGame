@@ -143,10 +143,20 @@ function getUserById(id) {
 }
 
 function updateUserById(id, newValues) {
+    console.log("in update",id, newValues);
     return new Promise((resolve, reject) => {
         let o_id = new mongo.ObjectID(id);
-        delete (newValues._id);
         const query = { "_id": o_id };
+        delete (newValues._id);
+        if (newValues.isBanned)
+            newValues.isBanned = String(newValues.isBanned) == 'true' // universal solution to get both bool and string and return bool
+        if (newValues.numOfGames != undefined)
+            newValues.numOfGames = parseInt(newValues.numOfGames);
+        if (newValues.numOfVictoryGames != undefined)
+            newValues.numOfVictoryGames = parseInt(newValues.numOfVictoryGames);
+        if (newValues.messages != undefined)
+            newValues.messages = parseInt(newValues.messages);
+        console.log('values are:', newValues)
         const collection = client.db("Legends-Memory-Game").collection("Users");
         collection.findOneAndUpdate(query, { $set: newValues })
             .then(data => resolve(data))
@@ -213,6 +223,12 @@ function addToGames(id) {
 
 function findUser(query) {
     let newQuery = query;
+    if (newQuery.isBanned)
+        newQuery.isBanned = String(newQuery.isBanned) == 'true' // universal solution to get both bool and string and return bool
+    if (newQuery.numOfGames)
+        newQuery.numOfGames = parseInt(newQuery.numOfGames);
+    if (newQuery.numOfVictoryGames)
+        newQuery.numOfVictoryGames = parseInt(newQuery.numOfVictoryGames);
     return new Promise((resolve, reject) => {
         for (let key in newQuery) {
             if (!newQuery[key]) {
