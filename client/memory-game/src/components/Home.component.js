@@ -64,15 +64,15 @@ export default class Home extends Component {
                 height="18"></iframe>
               <h1 className="home-title">Memory Game</h1>
             </header>
-            <section>
-              <div id='countriesPie' style={{ position: 'fixed', top: '50%', backgroundColor: 'lightBlue', opacity: '1', borderRadius: '100%' }}>
-                <p>Wins/Losses:</p>
-                <SimplePieChart games={this.state.games} victories={this.state.victories} />
-              </div>
-            </section>
             <Router>
               <Switch>
                 <Route exact path="/">
+                  <section>
+                    <div id='winsPie' style={{ position: 'fixed', top: '50%', opacity: '1', borderRadius: '100%' }}>
+                      <p>Wins/Losses:</p>
+                      <SimplePieChart games={this.state.games} victories={this.state.victories} />
+                    </div>
+                  </section>
                   <nav>
                     <Link className="btn" id="game_btn" to="/game">Play Game</Link>
                     <Link className="btn" id="game_btn" to="/about">About us</Link>
