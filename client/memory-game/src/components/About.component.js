@@ -29,7 +29,7 @@ export default class About extends Component {
                 <div style={{ height: '75vh' }}>
                     <Map countries={this.state.countries} />
                 </div>
-                <div id='countriesPie' style={{ position: 'fixed', top: '50%',  opacity: '1', borderRadius: '100%' }}>
+                <div className='pie' id='countriesPie'>
                     <p>Users chart:</p>
                     <SimplePieChart data={this.state.countries} />
                 </div>

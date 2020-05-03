@@ -68,7 +68,7 @@ export default class Home extends Component {
               <Switch>
                 <Route exact path="/">
                   <section>
-                    <div id='winsPie' style={{ position: 'fixed', top: '50%', opacity: '1', borderRadius: '100%' }}>
+                    <div className="pie" id='winsPie'>
                       <p>Wins/Losses:</p>
                       <SimplePieChart games={this.state.games} victories={this.state.victories} />
                     </div>

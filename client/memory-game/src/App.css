@@ -1,5 +1,7 @@
-html { width: 100%; height:100%; }
-
+html {
+    width: 100%;
+    height: 100%;
+}
 .App, .Home {
     background-image: url("/cards/background.jpg");
     background-repeat: no-repeat;
@@ -64,9 +66,9 @@ nav {
     width: fit-content;
     font-size: initial;
 }
-.chat_container{
-  width: 100%;
-  display: inline-block;
+.chat_container {
+    width: 100%;
+    display: inline-block;
 }
 .left {
     float: left;
@@ -80,16 +82,16 @@ nav {
     position: absolute;
     margin-left: 3vw;
 }
-#chat_box input{
-  position: absolute;
-  width: 95%;
-  bottom: 6%;
-  left: 2%;
-  right: 2%;
+#chat_box input {
+    position: absolute;
+    width: 95%;
+    bottom: 6%;
+    left: 2%;
+    right: 2%;
 }
-#chat_box input[type=submit]{
-  bottom: 0;
-  background-color: #61dafb;
+#chat_box input[type=submit] {
+    bottom: 0;
+    background-color: #61dafb;
 }
 #chat_board {
     position: inherit;
@@ -126,4 +128,16 @@ nav {
 .time-left {
     float: left;
     color: #999;
+}
+
+/*  pie stuff   */
+#winsPie {
+    top: 15%;
+    left: 40%;
+}
+.pie {
+    position: absolute;
+    top: 20%;
+    opacity: 1;
+    border-radius: 100%;
 }
