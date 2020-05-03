@@ -421,7 +421,7 @@ export default class Admin extends Component {
                     })
                 }).then(data => { console.log("deleted successfully", data); this.setState({ status: 'ready' }) })
                 .catch((err) => console.error("error deleting", err))
-                .finally(() => this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' }))
+                .finally(() => { this.setState({ clickedUser: '', updatedUsers: [], editOrRemove: '' }); this.handleSubmitSearch()})//////////// BAR IS HERE
         }
     }
 
